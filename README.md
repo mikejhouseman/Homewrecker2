@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![Database Schema](/QuickDBD-Homewrecker.png)
+![Database Schema](/DBSchema.png)
 
 ## API Documentation
 
