@@ -8,6 +8,14 @@ module.exports = {
     logQueryParameters: true,
     typeValidation: true
   },
+  // May update the following if needed pending PM feedback:
+  // test: {
+  //   storage: config.dbFile,
+  //   dialect: "sqlite",
+  //   seederStorage: "sequelize",
+  //   logQueryParameters: true,
+  //   typeValidation: true
+  // },
   production: {
     use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
