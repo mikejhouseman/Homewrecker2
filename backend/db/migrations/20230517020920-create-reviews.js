@@ -7,48 +7,20 @@ if (process.env.NODE_ENV === 'production') {
 }
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Spots', {
+    await queryInterface.createTable('Reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      address: {
-        type: Sequelize.STRING(50),
+      stars: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
-      city: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      state: {
-        type: Sequelize.STRING(2),
+      reviewText: {
+        type: Sequelize.TEXT,
         allowNull: true
-      },
-      country: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      lat: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      lng: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
-      },
-      name: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      description: {
-        type: Sequelize.STRING(256),
-        allowNull: false
-      },
-      price: {
-        type: Sequelize.DECIMAL,
-        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -63,6 +35,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Spots', options);
+    await queryInterface.dropTable('Reviews', options);
   }
 };
