@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+const User = require('./user');
+const Spot = require('./spots');
+
 module.exports = (sequelize, DataTypes) => {
   class Bookings extends Model {
     /**
@@ -11,9 +14,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Bookings.belongsTo(models.User, {
+        foreignKey: 'userId', as: 'user'
+      });
+      Bookings.belongsTo(models.Spot, {
+        foreignKey: 'spotId', as: 'spot'
+      });
     }
   }
   Bookings.init({
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    userId : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: 'id'
+      }
+    },
+    spotId : {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Spot,
+        key: 'id'
+      }
+    },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,

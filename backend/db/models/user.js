@@ -1,29 +1,75 @@
 'use strict';
 const { Model, Validator } = require('sequelize');
+const Booking = require('./bookings');
+const Spot = require('./spots');
+const Review = require('./reviews');
+const Image = require('./images');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // Define associations
-      User.hasMany(models.Booking, {
-        foreignKey: 'userId',
-        as: 'bookings',
+      User.hasMany(
+        models.Booking, {
+          foreignKey: 'userId',
+          as: 'bookings'
       });
-
-      User.hasMany(models.Review, {
-        foreignKey: 'userId',
-        as: 'reviews',
+      User.hasMany(
+        models.Spot, {
+          foreignKey: 'userId',
+          as: 'spots',
+        });
+      User.hasMany(
+        models.Review, {
+          foreignKey: 'userId',
+          as: 'reviews',
       });
-
-      User.hasMany(models.Spot, {
+      User.hasMany(
+        models.Image, {
         foreignKey: 'userId',
-        as: 'spots',
+        as: 'images',
       });
     }
   };
 
   User.init(
     {
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+      },
+      bookingId : {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: Booking,
+          key: 'id'
+        }
+      },
+      spotId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: Spot,
+          key: 'id'
+        }
+      },
+      reviewId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: Review,
+          key: 'id'
+        }
+      },
+      imageId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: Image,
+          key: 'imageableId'
+        }
+      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,

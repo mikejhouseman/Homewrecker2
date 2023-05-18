@@ -14,8 +14,28 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      stars: {
+      spotId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Spots',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      stars: {
+        type: Sequelize.DECIMAL(3, 2),
         allowNull: false
       },
       reviewText: {

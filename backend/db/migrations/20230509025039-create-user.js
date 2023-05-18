@@ -14,21 +14,53 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      bookingId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'bookings',
+          key: 'id'
+        },
+      },
+      spotId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'spots',
+          key: 'id'
+        }
+      },
+      reviewId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'reviews',
+          key: 'reviewId'
+        }
+      },
+      imageId: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'images',
+          key: 'imageableId'
+        }
+      },
       username: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },
       firstName: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       lastName: {
-        type: Sequelize.STRING(30),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       email: {
-        type: Sequelize.STRING(256),
+        type: Sequelize.STRING,
         allowNull: false,
         unique: true
       },

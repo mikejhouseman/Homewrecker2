@@ -2,6 +2,11 @@
 const {
   Model
 } = require('sequelize');
+const User = require('./user');
+const Booking = require('./bookings');
+const Review = require('./reviews');
+const Image = require('./images')
+
 module.exports = (sequelize, DataTypes) => {
   class Spots extends Model {
     /**
@@ -11,6 +16,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Spots.belongsTo(models.User, {
+        foreignKey: 'userId',
+        as: 'user'
+      });
+      Spots.hasMany(models.Booking, {
+        foreignKey: 'spotId',
+        as: 'bookings'
+      });
+      Spots.hasMany(models.Review, {
+        foreignKey: 'spotId',
+        as: 'reviews'
+      });
       Spots.hasMany(models.Image, {
         foreignKey: 'imageableId',
         constraints: false,
@@ -18,10 +35,47 @@ module.exports = (sequelize, DataTypes) => {
           imageableType: 'Spot'
         },
         as: 'images'
-      })
+      });
     }
   }
   Spots.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: 'id'
+      }
+    },
+    reviewId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Review,
+        key: 'id'
+      }
+    },
+    imageId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Image,
+        key: 'imageableId'
+      }
+    },
+    bookingId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Booking,
+        key: 'id'
+      }
+    },
     address: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -1,4 +1,5 @@
 'use strict';
+
 /** @type {import('sequelize-cli').Migration} */
 
 let options = {};
@@ -13,6 +14,22 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'user',
+          key: 'id'
+        }
+      },
+      spotId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'spots',
+          key: 'id'
+        }
       },
       startDate: {
         type: Sequelize.DATE,
