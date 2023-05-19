@@ -27,16 +27,17 @@ module.exports = {
       spotId: {
         type: Sequelize.INTEGER,
         allowNull: false
-      },
-      reviewId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Reviews',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
+      }
+      // ,
+      // reviewId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Reviews',
+      //     key: 'id'
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE'
       },
       imageId: {
         type: Sequelize.INTEGER,
