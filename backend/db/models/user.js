@@ -38,38 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      bookingId : {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: Booking,
-          key: 'id'
-        }
-      },
-      spotId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: Spot,
-          key: 'id'
-        }
-      },
-      reviewId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: Review,
-          key: 'id'
-        }
-      },
-      imageId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: Image,
-          key: 'imageableId'
-        }
-      },
       username: {
         type: DataTypes.STRING,
         allowNull: false,

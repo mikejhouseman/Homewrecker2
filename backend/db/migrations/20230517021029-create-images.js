@@ -8,11 +8,14 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Images', {
-      imageableId: {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      imageableId: {
+        type: Sequelize.INTEGER,
       },
       url: {
         type: Sequelize.STRING

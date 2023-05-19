@@ -41,14 +41,6 @@ module.exports = (sequelize, DataTypes) => {
     imageableId: {
       type: DataTypes.INTEGER,
     },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'userId'
-      }
-    },
     url: {
       type: DataTypes.STRING,
       allowNull: false,

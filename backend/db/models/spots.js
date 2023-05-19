@@ -39,40 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    userId: {
+    ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: User,
-        key: 'id'
-      }
-    },
-    reviewId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Review,
-        key: 'id'
-      }
-    },
-    imageId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Image,
-        key: 'imageableId'
-      }
-    },
-    bookingId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Booking,
         key: 'id'
       }
     },
