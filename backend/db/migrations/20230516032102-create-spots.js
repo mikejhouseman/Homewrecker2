@@ -24,10 +24,6 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      spotId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
       // ,
       // reviewId: {
       //   type: Sequelize.INTEGER,
@@ -39,26 +35,26 @@ module.exports = {
       //   onUpdate: 'CASCADE',
       //   onDelete: 'CASCADE'
       // },
-      imageId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Images',
-          key: 'imageableId'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
-      bookingId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Bookings',
-          key: 'id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
-      },
+      // imageId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Images',
+      //     key: 'imageableId'
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE'
+      // },
+      // bookingId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Bookings',
+      //     key: 'id'
+      //   },
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'CASCADE'
+      // },
       address: {
         type: Sequelize.STRING(50),
         allowNull: false
