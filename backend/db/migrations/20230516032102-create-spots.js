@@ -27,7 +27,7 @@ module.exports = {
       spotId: {
         type: Sequelize.INTEGER,
         allowNull: false
-      }
+      },
       // ,
       // reviewId: {
       //   type: Sequelize.INTEGER,
@@ -38,7 +38,7 @@ module.exports = {
       //   },
       //   onUpdate: 'CASCADE',
       //   onDelete: 'CASCADE'
-      },
+      // },
       imageId: {
         type: Sequelize.INTEGER,
         allowNull: false,
