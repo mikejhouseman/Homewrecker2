@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'user',
+          model: 'Users',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'reviews',
+          model: 'Reviews',
           key: 'id'
         },
         onUpdate: 'CASCADE',
@@ -42,7 +42,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'images',
+          model: 'Images',
           key: 'imageableId'
         },
         onUpdate: 'CASCADE',
@@ -52,7 +52,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'bookings',
+          model: 'Bookings',
           key: 'id'
         },
         onUpdate: 'CASCADE',

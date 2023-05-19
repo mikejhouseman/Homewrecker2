@@ -18,7 +18,7 @@ module.exports = {
         allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'bookings',
+          model: 'Bookings',
           key: 'id'
         },
       },
@@ -26,7 +26,7 @@ module.exports = {
         allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'spots',
+          model: 'Spots',
           key: 'id'
         }
       },
@@ -34,16 +34,16 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'reviews',
-          key: 'reviewId'
+          model: 'Reviews',
+          key: 'id'
         }
       },
       imageId: {
         allowNull: true,
         type: Sequelize.INTEGER,
         references: {
-          model: 'images',
-          key: 'imageableId'
+          model: 'Images',
+          key: 'id'
         }
       },
       username: {
