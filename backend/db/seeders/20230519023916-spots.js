@@ -11,7 +11,7 @@ module.exports = {
     options.tableName = 'Spots';
     return queryInterface.bulkInsert(options, [
       {
-        ownerId: 1,
+        ownerid: 1,
         address: '123 Main St',
         city: 'New York',
         state: 'NY',
@@ -23,7 +23,7 @@ module.exports = {
         price: 100.00,
       },
       {
-        ownerId: 2,
+        ownerid: 2,
         address: '456 Elm St',
         city: 'Los Angeles',
         state: 'CA',
@@ -31,11 +31,12 @@ module.exports = {
         lat: 34.0522,
         lng: -118.2437,
         name: 'Glass House',
-        description: 'A luxurious house with multiple china cabinets',
+        description: 'A luxurious house with multiple china cabinets. \
+        Great for Greek wedding parties and throwing stones in!',
         price: 500.00,
       },
       {
-        ownerId: 3,
+        ownerid: 3,
         address: '789 Oak St',
         city: 'Chicago',
         state: 'IL',
@@ -43,11 +44,11 @@ module.exports = {
         lat: 41.8781,
         lng: -87.6298,
         name: 'House of Cards',
-        description: 'Check in, knock out!',
+        description: 'Sleep on the ground floor!',
         price: 200.00,
       },
       {
-        ownerId: 4,
+        ownerid: 4,
         address: '987 Pine St',
         city: 'San Francisco',
         state: 'CA',
@@ -59,7 +60,7 @@ module.exports = {
         price: 150.00,
       },
       {
-        ownerId: 5,
+        ownerid: 5,
         address: '654 Cedar St',
         city: 'Miami',
         state: 'FL',
@@ -71,7 +72,7 @@ module.exports = {
         price: 300.00,
       },
       {
-        ownerId: 6,
+        ownerid: 6,
         address: '321 Maple St',
         city: 'London',
         state: null,
@@ -98,7 +99,7 @@ module.exports = {
     options.tableName = 'Spots';
     const Op = Sequelize.op;
     return queryInterface.bulkDelete(options, {
-      ownerId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8] }
+      owner_id: { [Op.in]: [1, 2, 3, 4, 5, 6] }
     }, options, {});
   }
 };
