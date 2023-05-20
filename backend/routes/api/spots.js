@@ -9,23 +9,6 @@ router.get('/', async (req, res) => {
   try {
     const spots = await Spot.findAll({
       include: User,
-      attributes: [
-        'id',
-        'ownerId',
-        'address',
-        'city',
-        'state',
-        'country',
-        'lat',
-        'lng',
-        'name',
-        'description',
-        'price',
-        'createdAt',
-        'updatedAt',
-        'previewImage',
-        'avgRating'
-      ]
      });
 
     res.status(200).json(spots);
