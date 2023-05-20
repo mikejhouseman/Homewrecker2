@@ -15,32 +15,32 @@ module.exports = {
     options.tableName = 'Bookings';
     return queryInterface.bulkInsert(options, [
       {
-        bookerId: 1,
-        bookedSpot: 1,
+        userId: 1,
+        spotId: 1,
         startDate: generateRandomDate(new Date(), new Date('2024-12-31')),
         endDate: generateRandomDate(new Date(), new Date('2024-12-31'))
       },
       {
-        bookerId: 2,
-        bookedSpot: 2,
+        userId: 2,
+        spotId: 2,
         startDate: generateRandomDate(new Date(), new Date('2024-12-31')),
         endDate: generateRandomDate(new Date(), new Date('2024-12-31'))
       },
       {
-        bookerId: 3,
-        bookedSpot: 3,
+        userId: 3,
+        spotId: 3,
         startDate: generateRandomDate(new Date(), new Date('2024-12-31')),
         endDate: generateRandomDate(new Date(), new Date('2024-12-31'))
       },
       {
-        bookerId: 4,
-        bookedSpot: 4,
+        userId: 4,
+        spotId: 4,
         startDate: generateRandomDate(new Date(), new Date('2024-12-31')),
         endDate: generateRandomDate(new Date(), new Date('2024-12-31'))
       },
       {
-        bookerId: 5,
-        bookedSpot: 5,
+        userId: 5,
+        spotId: 5,
         startDate: generateRandomDate(new Date(), new Date('2024-12-31')),
         endDate: generateRandomDate(new Date(), new Date('2024-12-31'))
       }
@@ -50,8 +50,6 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     options.tableName = 'Bookings';
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete(options, {
-      bookerId: { [Op.in]: [1, 2, 3, 4, 5] }
-    }, options, {});
+    return queryInterface.bulkDelete(options, null, {});
   }
 };

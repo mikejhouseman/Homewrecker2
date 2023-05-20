@@ -1,9 +1,9 @@
 'use strict';
 const { Model, Validator } = require('sequelize');
-const Booking = require('./bookings');
-const Spot = require('./spots');
-const Review = require('./reviews');
-const Image = require('./images');
+// const Booking = require('./bookings');
+// const Spot = require('./spots');
+// const Review = require('./reviews');
+// const Image = require('./images');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -12,22 +12,22 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(
         models.Booking, {
           foreignKey: 'userId',
-          as: 'bookings'
+          // as: 'bookings'
       });
       User.hasMany(
         models.Spot, {
           foreignKey: 'userId',
-          as: 'spots',
+          // as: 'spots',
         });
       User.hasMany(
         models.Review, {
           foreignKey: 'userId',
-          as: 'reviews',
+          // as: 'reviews',
       });
       User.hasMany(
         models.Image, {
         foreignKey: 'userId',
-        as: 'images',
+        // as: 'images',
       });
     }
   };
@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
         validate: {
           len: [4, 30],
           isNotEmail(value) {
