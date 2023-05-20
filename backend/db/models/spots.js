@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    ownerId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
         len: [2,50],
-        isAlphanumeric: true
+        // isAlphanumeric: true
       }
     },
     city: {
@@ -84,6 +84,7 @@ module.exports = (sequelize, DataTypes) => {
             throw new Error('State is required for spots in the United States');
           }
         }
+      }
     },
     country:  {
       type: DataTypes.STRING,
@@ -144,7 +145,6 @@ module.exports = (sequelize, DataTypes) => {
         len: [2, 5]
       }
     },
-  }
  }, {
     sequelize,
     modelName: 'Spot',
