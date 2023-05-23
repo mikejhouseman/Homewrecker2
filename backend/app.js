@@ -60,6 +60,7 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
+    err.status = 400;
     err.title = 'Validation error';
     err.errors = errors;
   }

@@ -52,8 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [2,50],
-        // isAlphanumeric: true
+        len: [2,50]
       }
     },
     city: {
@@ -80,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
         reqdIfCountryIsUS(value) {
-          if(value && this.country === 'United States') {
+          if(!value && this.country === 'United States') {
             throw new Error('State is required for spots in the United States');
           }
         }
@@ -91,7 +90,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        isAlpha: true
       }
     },
     lat: {
@@ -145,6 +143,14 @@ module.exports = (sequelize, DataTypes) => {
         len: [2, 5]
       }
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: 'id',
+      },
+    }
  }, {
     sequelize,
     modelName: 'Spot',
