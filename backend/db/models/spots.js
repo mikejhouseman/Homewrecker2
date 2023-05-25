@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
         scope: {
           imageableType: 'Spot'
         },
-        // as: 'images'
+        as: 'previewImage'
       });
     }
   }
