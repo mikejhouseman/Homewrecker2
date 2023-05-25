@@ -141,7 +141,7 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
       },
       {
         model: User,
-        as: 'Owner',
+        as: 'user',
         attributes: ['id', 'firstName', 'lastName'],
       },
     ],
