@@ -2,7 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const csrf = require('csurf');
-const { Spot, User } = require('../../db/models')
+const { Spot, User, Review, Image } = require('../../db/models')
 const { check } = require('express-validator');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -32,6 +32,9 @@ check('lat')
   check('name')
     .isLength({ min: 2, max: 50 })
     .withMessage('Please keep your name between 2 and 50 characters long.'),
+  check('previewImage')
+    .isURL()
+    .withMessage('Please provide a valid image URL'),
   check('price')
     .exists({ checkFalsy: true })
     .isLength({ max: 7 })
@@ -42,7 +45,7 @@ check('lat')
 
 // POST a spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price} = req.body;
+  const { address, city, state, country, lat, lng, name, description, previewImage, price} = req.body;
   const spot = await Spot.create({ userId:req.user.id, address, city, state, country, lat, lng, name, description, price});
   res.json(spot);
 })
@@ -50,7 +53,7 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
 // Edit a spot by checking if it exists, checking if user is the owner, grabbing data to update, then returning updated spot
 router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   const { id } = req.params;
-  const { address, city, state, country, lat, lng, name, description, price} = req.body;
+  const { address, city, state, country, lat, lng, name, description, previewImage, price} = req.body;
   const spot = await Spot.findByPk(id);
   if (!spot) {
     const error = new Error('Spot not found');
@@ -70,11 +73,23 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   spot.lng = lng;
   spot.name = name;
   spot.description = description;
+  spot.previewImage = previewImage;
   spot.price = price;
   await spot.save();
   const updatedSpot = await Spot.findByPk(id);
   res.json(updatedSpot);
-})
+});
+
+// Get all spots owned by user
+router.get('/', requireAuth, async (req, res, next) => {
+  const userId = req.user.id;
+  const spots = await Spot.findAll({
+    where: {
+      userId,
+    },
+  });
+  res.json(spots)
+});
 
 // Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
 router.delete('/:id', requireAuth, async (req, res) => {
