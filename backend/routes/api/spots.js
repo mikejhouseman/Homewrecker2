@@ -2,6 +2,7 @@ const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const csrf = require('csurf');
+const { sequelize } = require('../../db/models');
 const { Spot, User, Review, Image } = require('../../db/models')
 const { check } = require('express-validator');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
@@ -33,9 +34,6 @@ check('lat')
   check('name')
     .isLength({ min: 2, max: 50 })
     .withMessage('Please keep your name between 2 and 50 characters long.'),
-  check('previewImage')
-    .isURL()
-    .withMessage('Please provide a valid image URL'),
   check('price')
     .exists({ checkFalsy: true })
     .isLength({ max: 7 })
@@ -43,10 +41,28 @@ check('lat')
   handleValidationErrors
 ];
 
+const reviewCounter = async (req, res, next) => {
+    const spotId = req.params.id;
+    const count = await Review.count({ where: { spotId } });
+    req.numReviews = count;
+    next();
+  };
+  const reviewAvg = async (req, res, next) => {
+    const spotId = req.params.id;
+    const avg = await Review.findOne({
+      attributes: [
+        [sequelize.fn('AVG', sequelize.col('stars')), 'avgStarRating']
+      ],
+      where: { spotId }
+    });
+    req.avgStars = avg.avgStars;
+    next();
+  };
+
 
 // POST a spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, previewImage, price} = req.body;
+  const { address, city, state, country, lat, lng, name, description, price} = req.body;
   const spot = await Spot.create({ userId:req.user.id, address, city, state, country, lat, lng, name, description, price});
   res.json(spot);
 })
@@ -54,7 +70,7 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
 // Edit a spot by checking if it exists, checking if user is the owner, grabbing data to update, then returning updated spot
 router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   const { id } = req.params;
-  const { address, city, state, country, lat, lng, name, description, previewImage, price} = req.body;
+  const { address, city, state, country, lat, lng, name, description, price} = req.body;
   const spot = await Spot.findByPk(id);
   if (!spot) {
     const error = new Error('Spot not found');
@@ -74,7 +90,6 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   spot.lng = lng;
   spot.name = name;
   spot.description = description;
-  spot.previewImage = previewImage;
   spot.price = price;
   await spot.save();
   const updatedSpot = await Spot.findByPk(id);
@@ -90,11 +105,55 @@ router.get('/', requireAuth, async (req, res, next) => {
     },
     include: [{
       model: Image,
-      as: 'previewImage',
+      as: 'image',
       attributes: ['url']
-    }]
+    },
+    {
+      model: Review,
+      attributes: [
+        [
+        sequelize.fn('AVG', sequelize.col('Reviews.stars')),
+        'avgRating',
+        ]
+      ],
+    }
+  ],
+  group: [
+    'Spot.id',
+    'image.id'
+  ],
   });
   res.json(spots)
+});
+
+// Get details for a Spot from an id
+router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
+  const spotId = req.params.id;
+  const spot = await Spot.findOne({
+    where: {
+      id: spotId
+    },
+    include: [
+      {
+        model: Image,
+        as: 'image',
+        attributes: ['id', 'url', 'preview'],
+      },
+      {
+        model: User,
+        as: 'Owner',
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+    ],
+    group: [
+      'Spot.id',
+      'image.id',
+      'user.id',
+    ],
+  });
+  spot.dataValues.numReviews = req.numReviews;
+  spot.dataValues.avgStars = req.avgStars;
+  res.json(spot);
 });
 
 // Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
