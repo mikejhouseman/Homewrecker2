@@ -54,6 +54,10 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isIn: [['Review', 'Spot']]
       }
+    },
+    preview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     }
   }, {
     sequelize,
