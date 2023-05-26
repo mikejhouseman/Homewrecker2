@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         scope: {
           imageableType: 'Review'
         },
-        as: 'review',
+        as: 'ReviewImages',
       });
       Image.belongsTo(models.Spot, {
         foreignKey: 'imageableId',
@@ -29,11 +29,6 @@ module.exports = (sequelize, DataTypes) => {
           imageableType: 'Spot'
         },
         as: 'spot',
-      });
-      Image.belongsTo(models.User, {
-        foreignKey: 'userId',
-        constraints: false,
-        as: 'user',
       });
     }
   }

@@ -49,13 +49,10 @@ const reviewCounter = async (req, res, next) => {
   };
   const reviewAvg = async (req, res, next) => {
     const spotId = req.params.id;
-    const avg = await Review.findOne({
-      attributes: [
-        [sequelize.fn('AVG', sequelize.col('stars')), 'avgStarRating']
-      ],
-      where: { spotId }
-    });
-    req.avgStars = avg.avgStars;
+    const count = req.numReviews;
+    const sum = await Review.sum('stars', { where: { spotId } });
+    const avgStarRating = sum/count;
+    req.avgStarRating = avgStarRating;
     next();
   };
 
@@ -105,7 +102,7 @@ router.get('/', requireAuth, async (req, res, next) => {
     },
     include: [{
       model: Image,
-      as: 'image',
+      as: 'SpotImages',
       attributes: ['url']
     },
     {
@@ -120,7 +117,7 @@ router.get('/', requireAuth, async (req, res, next) => {
   ],
   group: [
     'Spot.id',
-    'image.id'
+    'SpotImages.id'
   ],
   });
   res.json(spots)
@@ -129,32 +126,66 @@ router.get('/', requireAuth, async (req, res, next) => {
 // Get details for a Spot from an id
 router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
   const spotId = req.params.id;
-  const spot = await Spot.findOne({
-    where: {
-      id: spotId
-    },
+  const spot = await Spot.findByPk(spotId, {
     include: [
       {
         model: Image,
-        as: 'image',
+        as: 'SpotImages',
         attributes: ['id', 'url', 'preview'],
       },
       {
         model: User,
-        as: 'user',
+        as: 'Owner',
         attributes: ['id', 'firstName', 'lastName'],
       },
     ],
     group: [
       'Spot.id',
-      'image.id',
-      'user.id',
+      'SpotImages.id',
+      'Owner.id',
     ],
   });
+  if(!spot) {
+    return res.status(404).json({error: 'Spot does not exist'})
+  };
   spot.dataValues.numReviews = req.numReviews;
-  spot.dataValues.avgStars = req.avgStars;
+  spot.dataValues.avgStarRating = req.avgStarRating;
+
   res.json(spot);
 });
+
+// Add an Image to a Spot based on the Spot's id
+router.post('/:id/images', requireAuth, async (req, res) => {
+  const spotId = req.params.id;
+  const userId = req.user.id;
+  if (spot.userId !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access' });
+  };
+  const spot = await Spot.findByPk(spotId);
+  if(!spot) {
+    return res.status(404).json({error: 'Spot does not exist'})
+  };
+  const { url, preview } = req.body;
+  const image = await Image.create({spotId, url, preview, imageableId: spot.id, imageableType: 'Spot'});
+  res.json({
+    id: image.id,
+    url: image.url,
+    preview: image.preview,
+    imageableType: image.imageableType
+  })
+});
+
+// Delete an Image for a Spot
+router.delete('/images/:imageId', requireAuth, async (req, res) => {
+    const imageId = req.params.imageId;
+    const image = await Image.findByPk(imageId);
+    if(!image) {
+      return res.status(404).json({error: 'Image does not exist'})
+    };
+    await image.destroy();
+    res.json({message: "Image successfully deleted"})
+});
+
 
 // Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
 router.delete('/:id', requireAuth, async (req, res) => {
