@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Review.belongsTo(models.Spot, {
         foreignKey: 'spotId',
-        as: 'Spot'
+        // as: 'Spot'
       });
       Review.belongsTo(models.User, {
         foreignKey: 'userId',
-        as: 'User'
+        // as: 'User'
       })
       Review.hasMany(models.Image, {
         foreignKey: 'imageableId',
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         scope: {
           imageableType: 'Review'
         },
-        // as: 'images'
+        as: 'ReviewImages'
       })
     }
   }
@@ -63,9 +63,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [0, 1000]
       }
-    },
-    previewImage: {
-      type: DataTypes.STRING
     }
   }, {
     sequelize,

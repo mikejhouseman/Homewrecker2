@@ -15,30 +15,35 @@ module.exports = {
         userId: 1,
         stars: 5,
         reviewText: 'Loved this spot! Situated by a grassy field and includes baseball bats!!'
+        // previewImage: "https://www.incimages.com/uploaded_files/image/1024x576/getty_152414899_97046097045006_68075.jpg"
       },
       {
         spotId: 1,
         userId: 2,
         stars: 3,
         reviewText: 'Great setup, but I find that Xerox machines are harder to destruct that previously thought.'
+        // previewImage: "https://www.incimages.com/uploaded_files/image/1024x576/getty_152414899_97046097045006_68075.jpg"
       },
       {
         spotId: 3,
         userId: 3,
         stars: 2,
         reviewText: 'Collapses too easily. I stil have more rage to burn.'
+        // previewImage: "https://www.incimages.com/uploaded_files/image/1024x576/getty_152414899_97046097045006_68075.jpg"
       },
       {
         spotId: 2,
         userId: 1,
         stars: 4,
         reviewText: 'Loved set up but not built tall enough. Wanted more destruction.'
+        // previewImage: "https://www.incimages.com/uploaded_files/image/1024x576/getty_152414899_97046097045006_68075.jpg"
       },
       {
         spotId: 4,
         userId: 6,
         stars: 1,
         reviewText: 'Listing said it was a 36 degree angle, but is only 23. Reporting to authorities.'
+        // previewImage: "https://www.incimages.com/uploaded_files/image/1024x576/getty_152414899_97046097045006_68075.jpg"
       }
     ], {});
   },

@@ -124,7 +124,7 @@ router.get('/current', requireAuth, async (req, res) => {
     'Reviews.id'
   ],
   });
-  res.json(spots)
+  return res.json(spots)
 });
 
 // Get details for a Spot from an id
@@ -171,13 +171,39 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   };
   const { url, preview } = req.body;
   const image = await Image.create({spotId, url, preview, imageableId: spot.id, imageableType: 'Spot'});
-  res.json({
+  return res.json({
     id: image.id,
     url: image.url,
     preview: image.preview,
     imageableType: image.imageableType
   })
 });
+
+// Get all Reviews by a Spot's id
+router.get('/:id/reviews', async (req, res) => {
+  const spotId = req.params.id;
+  const reviews = await Review.findAll({
+    where: {spotId},
+    include: [
+      {
+        model: User,
+        as: 'User',
+        attributes: ['id', 'firstName', 'lastName']
+      },
+      {
+        model: Image,
+        attributes: ['id', 'url'],
+      }
+    ]
+  });
+  if (reviews.length === 0) {
+    return res.status(404).json({ error: 'No reviews exist for this spot' });
+  }
+  return res.json(reviews)
+})
+
+
+
 
 // Add Review to a Spot based on the Spot's id
 router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
@@ -187,16 +213,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   if(!spot) {
     return res.status(404).json({error: 'Spot does not exist'})
   };
-  if (spot.userId !== userId) {
-    return res.status(403).json({ error: 'Unauthorized access' });
-  };
   const { stars, reviewText } = req.body;
-  const review = await Review.create({ stars, reviewText });
-  res.json({
-    id: review.id,
-    stars: review.stars,
-    reviewText: review.reviewText,
-  })
   const existingReview = await Review.findOne({
     where: {
       spotId,
@@ -206,6 +223,12 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   if (existingReview) {
     return res.status(403).json({ error: 'Review already exists for this spot' });
   }
+  const review = await Review.create({ userId, spotId, stars, reviewText });
+  return res.json({
+    id: review.id,
+    stars: review.stars,
+    reviewText: review.reviewText
+  });
 });
 
 

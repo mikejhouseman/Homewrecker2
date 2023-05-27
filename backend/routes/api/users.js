@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const { User, Review, Images, Bookings, Image } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
@@ -66,5 +66,31 @@ router.post(
     });
   }
 );
+// Get all reviews by user
+router.get('/reviews', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const reviews = await Review.findAll({
+    where: {
+      userId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+      {
+        model: Spot,
+        attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'],
+      },
+      {
+        model: Image,
+        as: 'ReviewImages',
+        attributes: ['id', 'url']
+      },
+    ],
+    attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt']
+  });
+  return res.json(reviews);
+});
 
 module.exports = router;
