@@ -101,11 +101,7 @@ router.get('/current', requireAuth, async (req, res) => {
     where: {
       userId,
     },
-    include: [{
-      model: Image,
-      as: 'SpotImages',
-      attributes: ['url']
-    },
+    include: [
     {
       model: Review,
       attributes: [ ],
@@ -117,7 +113,6 @@ router.get('/current', requireAuth, async (req, res) => {
     ]],
   group: [
     'Spot.id',
-    'SpotImages.id',
     'Reviews.id'
   ],
   });
