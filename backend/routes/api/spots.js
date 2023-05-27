@@ -93,8 +93,8 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   res.json(updatedSpot);
 });
 
-// Get all spots owned by user
-router.get('/', requireAuth, async (req, res, next) => {
+// Get all current user spots
+router.get('/current', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const spots = await Spot.findAll({
     where: {
@@ -158,12 +158,12 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
 router.post('/:id/images', requireAuth, async (req, res) => {
   const spotId = req.params.id;
   const userId = req.user.id;
-  if (spot.userId !== userId) {
-    return res.status(403).json({ error: 'Unauthorized access' });
-  };
   const spot = await Spot.findByPk(spotId);
   if(!spot) {
     return res.status(404).json({error: 'Spot does not exist'})
+  };
+  if (spot.userId !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access' });
   };
   const { url, preview } = req.body;
   const image = await Image.create({spotId, url, preview, imageableId: spot.id, imageableType: 'Spot'});
@@ -205,13 +205,62 @@ router.delete('/:id', requireAuth, async (req, res) => {
 // GET all spots
 router.get('/', async (req, res) => {
   try {
+    // destructure query for page, size, etc.
+  const { page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+  // Use given values otherwise provide defaults
+  page = Number(page) || 1;
+  size = Number(size) || 20;
+  minLat = Float(minLat) || -1000;
+  maxLat = Float(maxLat) || 1000;
+  minLng = Float(minLng) || -1000;
+  maxLng = Float(maxLng) || 1000;
+  minPrice = Float(minPrice) || 0;
+  maxPrice = Float(maxPrice) || 0;
+  // construct where with op of between min and maxes
+  const where = {};
+  if (minLat && maxLat) {
+    where.lat = { [Op.between]: [minLat, maxLat] };
+  };
+  if (minLng && maxLng) {
+    where.lng = { [Op.between]: [minLng, maxLng] };
+  }
+  if (minPrice && maxPrice) {
+    where.price = { [Op.between]: [minPrice, maxPrice] };
+  }
+
   res.cookie('XSRF-TOKEN', req.csrfToken());
-  const spots = await Spot.findAll();
+  const spots = await Spot.findAll({
+    include: [
+      {
+        model: Image,
+        as: 'SpotImages',
+      },
+      {
+        model: Review,
+      },
+    ],
+    // Provide a where clause where we pass in all the parameters
+    where: {
+      // include op where lat is between minLat and maxlat, (same w lng, price)
+      minLat, maxLat, minLng, maxLng, minPrice, maxPrice
+    },
+    where,
+    group: [
+      'Spot.id',
+      'Review.id',
+      'SpotImages.id'
+    ],
+    // Limit size and offset page (page - 1) * size
+    limit: size,
+    offset: (page - 1) * size
+
+  });
   res.status(200).json(spots);
   } catch (error) {
     console.error('Error retrieving all spots', error);
     res.status(500).json({error: 'Failed to retrieve spots'})
   }
 });
+
 
 module.exports = router;
