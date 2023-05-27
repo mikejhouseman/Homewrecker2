@@ -41,6 +41,16 @@ check('lat')
   handleValidationErrors
 ];
 
+const validateReview = [
+  check('stars')
+  .isInt({ min: 1, max: 5 })
+  .withMessage('Please provide a star rating between 1 and 5.'),
+  check('reviewText')
+    .isLength({ min: 2, max: 1000 })
+    .withMessage('Please provide a review between 2 and 500 characters.'),
+  handleValidationErrors,
+];
+
 const reviewCounter = async (req, res, next) => {
     const spotId = req.params.id;
     const count = await Review.count({ where: { spotId } });
@@ -55,7 +65,6 @@ const reviewCounter = async (req, res, next) => {
     req.avgStarRating = avgStarRating;
     next();
   };
-
 
 // POST a spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
@@ -92,7 +101,6 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   const updatedSpot = await Spot.findByPk(id);
   res.json(updatedSpot);
 });
-
 
 // Get all current user spots
 router.get('/current', requireAuth, async (req, res) => {
@@ -171,6 +179,36 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   })
 });
 
+// Add Review to a Spot based on the Spot's id
+router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
+  const spotId = req.params.id;
+  const userId = req.user.id;
+  const spot = await Spot.findByPk(spotId);
+  if(!spot) {
+    return res.status(404).json({error: 'Spot does not exist'})
+  };
+  if (spot.userId !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access' });
+  };
+  const { stars, reviewText } = req.body;
+  const review = await Review.create({ stars, reviewText });
+  res.json({
+    id: review.id,
+    stars: review.stars,
+    reviewText: review.reviewText,
+  })
+  const existingReview = await Review.findOne({
+    where: {
+      spotId,
+      userId,
+    },
+  });
+  if (existingReview) {
+    return res.status(403).json({ error: 'Review already exists for this spot' });
+  }
+});
+
+
 // Delete an Image for a Spot
 router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
@@ -184,7 +222,7 @@ router.delete('/images/:imageId', requireAuth, async (req, res) => {
 
 
 // Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete(':id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
   const spot = await Spot.findByPk(id);
