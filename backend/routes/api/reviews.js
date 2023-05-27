@@ -63,12 +63,12 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     return res.status(403).json({ error: 'Unauthorized access' });
   };
   const maxImages = 4;
-  const imageCount = await Image.count({ where: { imageableId: review.id } });
-  if (imageCount >= maxImages) {
+  const imageCount = await Image.findAll({ where: { imageableId: review.id, imageableType: 'Review' } });
+  if (imageCount.length >= maxImages) {
     return res.status(403).json({ message: 'A max of 4 images is allowed per review.' });
   };
   const { url, preview } = req.body;
-  const image = await Image.create({ url, preview, imageableId, imageableType: 'Review'});
+  const image = await Image.create({ url, preview, imageableId: reviewId, imageableType: 'Review'});
   return res.json({
     id: image.id,
     url: image.url,
@@ -93,8 +93,6 @@ router.delete('/:reviewId/images/:imageId', requireAuth, async (req, res) => {
     return res.status(404).json({ error: 'Image does not exist for the review' });
   }
   await image.destroy();
-
-  // Send a success response
   return res.json({ message: 'Image deleted successfully' });
 });
 
