@@ -93,6 +93,7 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   res.json(updatedSpot);
 });
 
+
 // Get all current user spots
 router.get('/current', requireAuth, async (req, res) => {
   const userId = req.user.id;
@@ -107,17 +108,17 @@ router.get('/current', requireAuth, async (req, res) => {
     },
     {
       model: Review,
-      attributes: [
-        [
-        sequelize.fn('AVG', sequelize.col('Reviews.stars')),
-        'avgRating',
-        ]
-      ],
+      attributes: [ ],
     }
   ],
+  attributes: [[
+    sequelize.fn('AVG', sequelize.col('Reviews.stars')),
+    'avgRating',
+    ]],
   group: [
     'Spot.id',
-    'SpotImages.id'
+    'SpotImages.id',
+    'Reviews.id'
   ],
   });
   res.json(spots)
