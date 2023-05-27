@@ -223,10 +223,10 @@ router.get('/', async (req, res) => {
   };
   if (minLng && maxLng) {
     where.lng = { [Op.between]: [minLng, maxLng] };
-  }
+  };
   if (minPrice && maxPrice) {
     where.price = { [Op.between]: [minPrice, maxPrice] };
-  }
+  };
 
   res.cookie('XSRF-TOKEN', req.csrfToken());
   const spots = await Spot.findAll({
@@ -239,11 +239,6 @@ router.get('/', async (req, res) => {
         model: Review,
       },
     ],
-    // Provide a where clause where we pass in all the parameters
-    where: {
-      // include op where lat is between minLat and maxlat, (same w lng, price)
-      minLat, maxLat, minLng, maxLng, minPrice, maxPrice
-    },
     where,
     group: [
       'Spot.id',
@@ -253,7 +248,6 @@ router.get('/', async (req, res) => {
     // Limit size and offset page (page - 1) * size
     limit: size,
     offset: (page - 1) * size
-
   });
   res.status(200).json(spots);
   } catch (error) {
