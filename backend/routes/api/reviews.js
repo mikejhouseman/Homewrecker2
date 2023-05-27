@@ -107,14 +107,13 @@ router.get('/current', requireAuth, async (req, res) => {
     },
     {
       model: Review,
-      attributes: [
-        [
-        sequelize.fn('AVG', sequelize.col('Reviews.stars')),
-        'avgRating',
-        ]
-      ],
+      attributes: [ ],
     }
   ],
+  attributes: [[
+    sequelize.fn('AVG', sequelize.col('Reviews.stars')),
+    'avgRating',
+    ]],
   group: [
     'Spot.id',
     'SpotImages.id',
