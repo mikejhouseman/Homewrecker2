@@ -111,7 +111,7 @@ router.get('/current', requireAuth, async (req, res) => {
       attributes: [ ],
     }
   ],
-  attributes: [[
+  attributes: [ id, userId, address, city, state, country, lat, lng, name, description, price, updatedAt, createdAt, [
     sequelize.fn('AVG', sequelize.col('Reviews.stars')),
     'avgRating',
     ]],

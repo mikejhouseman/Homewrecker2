@@ -150,6 +150,9 @@ module.exports = (sequelize, DataTypes) => {
         model: User,
         key: 'id',
       },
+    },
+    previewImage: {
+      type: DataTypes.STRING
     }
  }, {
     sequelize,
