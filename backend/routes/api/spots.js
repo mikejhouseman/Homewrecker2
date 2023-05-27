@@ -227,7 +227,6 @@ router.get('/', async (req, res) => {
   if (minPrice && maxPrice) {
     where.price = { [Op.between]: [minPrice, maxPrice] };
   };
-
   res.cookie('XSRF-TOKEN', req.csrfToken());
   const spots = await Spot.findAll({
     include: [
