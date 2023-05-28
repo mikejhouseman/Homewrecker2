@@ -3,11 +3,12 @@ const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
 const csrf = require('csurf');
 const { sequelize } = require('../../db/models');
-const { Spot, User, Review, Image } = require('../../db/models')
+const { Spot, User, Review, Image, Booking } = require('../../db/models')
 const { check } = require('express-validator');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const images = require('../../db/models/images');
+const { reconstructFieldPath } = require('express-validator/src/field-selection');
 
 const router = express.Router();
 const validateSpot = [
@@ -45,7 +46,7 @@ const validateReview = [
   check('stars')
   .isInt({ min: 1, max: 5 })
   .withMessage('Please provide a star rating between 1 and 5.'),
-  check('reviewText')
+  check('review')
     .isLength({ min: 2, max: 1000 })
     .withMessage('Please provide a review between 2 and 500 characters.'),
   handleValidationErrors,
@@ -66,7 +67,7 @@ const reviewCounter = async (req, res, next) => {
     next();
   };
 
-// POST a spot
+// Post a spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
   const spot = await Spot.create({ userId:req.user.id, address, city, state, country, lat, lng, name, description, price});
@@ -102,30 +103,7 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   res.json(updatedSpot);
 });
 
-// Get all current user spots
-router.get('/current', requireAuth, async (req, res) => {
-  const userId = req.user.id;
-  const spots = await Spot.findAll({
-    where: {
-      userId,
-    },
-    include: [
-    {
-      model: Review,
-      attributes: [ ],
-    }
-  ],
-  attributes: [ id, userId, address, city, state, country, lat, lng, name, description, price, updatedAt, createdAt, [
-    sequelize.fn('AVG', sequelize.col('Reviews.stars')),
-    'avgRating',
-    ]],
-  group: [
-    'Spot.id',
-    'Reviews.id'
-  ],
-  });
-  return res.json(spots)
-});
+
 
 // Get details for a Spot from an id
 router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
@@ -192,6 +170,7 @@ router.get('/:id/reviews', async (req, res) => {
       },
       {
         model: Image,
+        as: 'ReviewImages',
         attributes: ['id', 'url'],
       }
     ]
@@ -202,6 +181,84 @@ router.get('/:id/reviews', async (req, res) => {
   return res.json(reviews)
 })
 
+// 28 Get all Bookings for a Spot based on the Spot's id
+router.get('/:id/bookings', requireAuth, async (req, res) => {
+  const spotId = req.params.id;
+  const spot = await Spot.findByPk(spotId);
+  if (!spot) {
+    return res.status(404).json({ error: 'Spot not found' });
+  };
+  const bookings = await Booking.findAll({
+    where: { spotId },
+    include: [
+      {
+        model: User,
+        as: 'User',
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+    ],
+  });
+  const isSpotOwner = req.user.id === spot.userId;
+  let responseData;
+  if (isSpotOwner) {
+    responseData = bookings.map((booking) => ({
+      id: booking.id,
+      spotId: booking.spotId,
+      userId: booking.userId,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+      createdAt: booking.createdAt,
+      updatedAt: booking.updatedAt,
+      User: booking.User,
+    }));
+  } else {
+    responseData = bookings.map((booking) => ({
+      spotId: booking.spotId,
+      startDate: booking.startDate,
+      endDate: booking.endDate,
+    }));
+  }
+  return res.json(responseData);
+});
+
+// 29 Create a Booking from a Spot based on the Spot's id
+router.post('/:id/bookings', requireAuth, async (req, res) => {
+  const spotId = req.params.id;
+  const userId = req.user.id;
+  const spot = await Spot.findByPk(spotId);
+  if (!spot) {
+    return res.status(404).json({ error: 'Spot does not exist' });
+  };
+  if (spot.userId === userId) {
+    return res.status(403).json({ error: 'You cannot book your own spot' });
+  };
+  const { startDate, endDate } = req.body;
+  const existingBooking = await Booking.findOne({
+    where: {
+      spotId,
+      startDate: { [Op.lte]: endDate },
+      endDate: { [Op.gte]: startDate }
+    }
+  });
+  if (existingBooking) {
+    return res.status(403).json({ error: 'A booking already exists for the specified dates' });
+  }
+  const booking = await Booking.create({
+    userId,
+    spotId,
+    startDate,
+    endDate
+  });
+  return res.json({
+    id: booking.id,
+    userId: booking.userId,
+    spotId: booking.spotId,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
+    createdAt: booking.createdAt,
+    updatedAt: booking.updatedAt
+  });
+});
 
 
 
@@ -213,7 +270,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   if(!spot) {
     return res.status(404).json({error: 'Spot does not exist'})
   };
-  const { stars, reviewText } = req.body;
+  const { stars } = req.body;
   const existingReview = await Review.findOne({
     where: {
       spotId,
@@ -223,7 +280,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   if (existingReview) {
     return res.status(403).json({ error: 'Review already exists for this spot' });
   }
-  const review = await Review.create({ userId, spotId, stars, reviewText });
+  const review = await Review.create({ userId, spotId, stars, reviewText: req.body.review });
   return res.json({
     id: review.id,
     stars: review.stars,
@@ -302,7 +359,7 @@ router.get('/', async (req, res) => {
     limit: size,
     offset: (page - 1) * size
   });
-  res.status(200).json(spots);
+  res.status(200).json({Spots: spots, page, size});
   } catch (error) {
     console.error('Error retrieving all spots', error);
     res.status(500).json({error})

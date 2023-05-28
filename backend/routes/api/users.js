@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Review, Images, Bookings, Image } = require('../../db/models');
+const { User, Review, Spot, Image, Booking, sequelize } = require('../../db/models');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
@@ -80,7 +80,7 @@ router.get('/reviews', requireAuth, async (req, res) => {
       },
       {
         model: Spot,
-        attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'],
+        attributes: ['id', 'userId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'],
       },
       {
         model: Image,
@@ -88,9 +88,34 @@ router.get('/reviews', requireAuth, async (req, res) => {
         attributes: ['id', 'url']
       },
     ],
-    attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt']
+    attributes: ['id', 'userId', 'spotId', 'reviewText', 'stars', 'createdAt', 'updatedAt']
   });
   return res.json(reviews);
+});
+
+// Get all current user spots
+router.get('/spots', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const spots = await Spot.findAll({
+    where: {
+      userId,
+    },
+    include: [
+    {
+      model: Review,
+      attributes: [ ],
+    }
+  ],
+  attributes: [ 'id', 'userId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'description', 'price', 'updatedAt', 'createdAt', [
+    sequelize.fn('AVG', sequelize.col('Reviews.stars')),
+    'avgRating',
+    ]],
+  group: [
+    'Spot.id',
+    'Reviews.id'
+  ],
+  });
+  return res.json(spots)
 });
 
 module.exports = router;

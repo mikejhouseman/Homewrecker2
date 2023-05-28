@@ -15,7 +15,7 @@ const validateReview = [
   check('stars')
   .isInt({ min: 1, max: 5 })
   .withMessage('Please provide a star rating between 1 and 5.'),
-  check('reviewText')
+  check('review')
     .isLength({ min: 2, max: 1000 })
     .withMessage('Please provide a review between 2 and 500 characters.'),
   handleValidationErrors,
@@ -76,7 +76,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   })
 });
 
-// Delete an Image for a Review
+// 35 Delete an Image for a Review
 router.delete('/:reviewId/images/:imageId', requireAuth, async (req, res) => {
   const reviewId = req.params.reviewId;
   const imageId = req.params.imageId;

@@ -10,11 +10,12 @@ const { restoreUser } = require("../../utils/auth.js");
 
 router.use(restoreUser);
 router.use('/spots', spotsRouter);
+router.use('/users', usersRouter);
 router.use('/session', sessionRouter);
 router.use('/reviews', reviewsRouter);
 router.use('/bookings', bookingsRouter);
 
-router.use('/users', usersRouter);
+
 
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
