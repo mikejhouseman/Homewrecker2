@@ -316,7 +316,13 @@ router.delete(':id', requireAuth, async (req, res) => {
   }
 );
 
-// GET all spots
+// 9. Get all spots
+router.get('/', async (req, res) => {
+  const spots = await Spot.findAll();
+  res.status(200).json({spots});
+});
+
+// 16. Get all spots w/ query filters
 router.get('/', async (req, res) => {
   try {
     // destructure query for page, size, etc.
