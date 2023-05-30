@@ -23,7 +23,7 @@ router.get('/', requireAuth, async (req, res) => {
     ],
     attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
   });
-  return res.json(bookings)
+  return res.status(200).json(bookings)
 });
 
 // 30 Edit a booking
@@ -39,10 +39,9 @@ router.put('/:id', requireAuth, async (req, res) => {
     });
   if (!booking) {
     return res.status(404).json({ error: 'Booking not found' });
-  }
-
+  };
   if (booking.endDate < new Date()) {
-      return res.status(400).json({ error: "Past bookings can't be edited" });
+      return res.status(400).json({ error: "Past bookings can't be modified" });
     }
   const existingBooking = await Booking.findOne({
     where: {
@@ -64,7 +63,7 @@ router.put('/:id', requireAuth, async (req, res) => {
   booking.startDate = startDate;
   booking.endDate = endDate;
   await booking.save();
-  return res.json(booking);
+  return res.status(200).json(booking);
 });
 
 // 31 Delete an existing booking
@@ -73,13 +72,13 @@ router.delete('/:id', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const booking = await Booking.findByPk(bookingId);
   if (!booking) {
-    return res.status(404).json({ error: 'Booking does not exist' });
+    return res.status(404).json({ error: 'Booking could not be found' });
   }
   if (booking.userId !== userId) {
     return res.status(403).json({ error: 'Unauthorized access' });
   }
   await booking.destroy();
-  return res.json({ message: 'Review deleted successfully' });
+  return res.status(200).json({ message: 'Successfully deleted' });
 });
 
 module.exports = router;

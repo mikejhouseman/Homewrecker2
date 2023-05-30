@@ -91,7 +91,7 @@ router.get('/reviews', requireAuth, async (req, res) => {
     ],
     attributes: ['id', 'userId', 'spotId', 'reviewText', 'stars', 'createdAt', 'updatedAt']
   });
-  return res.json(reviews);
+  return res.status(200).json(reviews);
 });
 
 // Get all current user spots
@@ -116,7 +116,7 @@ router.get('/spots', requireAuth, async (req, res) => {
     'Reviews.id'
   ],
   });
-  return res.json(spots)
+  return res.status(200).json(spots)
 });
 
 module.exports = router;

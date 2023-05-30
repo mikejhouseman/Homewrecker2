@@ -15,30 +15,33 @@ const validateSpot = [
   check('address')
     .exists({ checkFalsy: true })
     .isLength({ min: 2, max: 50 })
-    .withMessage('Please provide a valid address.'),
+    .withMessage('Street address is required'),
   check('city')
     .exists({ checkFalsy: true })
     .isLength({ min: 2, max: 50 })
-    .withMessage('Please provide a valid city.'),
+    .withMessage('City is required'),
   check('state')
     .isLength({ min: 2, max: 2 })
-    .withMessage('Please enter a valid US postal code.'),
+    .withMessage('State is required'),
   check('country')
   .exists({ checkFalsy: true })
-  .withMessage('Please enter a valid country.'),
+  .withMessage('Country is required'),
 check('lat')
   .exists({ checkFalsy: true })
-  .withMessage('Please enter a valid latitude.'),
+  .withMessage('Latitude is not valid'),
   check('lng')
     .exists({ checkFalsy: true })
-    .withMessage('Please enter a valid longitude.'),
+    .withMessage('Longitude is not valid'),
   check('name')
     .isLength({ min: 2, max: 50 })
-    .withMessage('Please keep your name between 2 and 50 characters long.'),
+    .withMessage('Name must be less than 50 characters'),
+  check('description')
+    .exists({ checkFalsy: true })
+    .withMessage('Description is required'),
   check('price')
     .exists({ checkFalsy: true })
     .isLength({ max: 7 })
-    .withMessage('Prices a limited to $100,000.00 per night.'),
+    .withMessage('Price per day is required.'),
   handleValidationErrors
 ];
 
@@ -67,11 +70,11 @@ const reviewCounter = async (req, res, next) => {
     next();
   };
 
-// Post a spot
+// Create and return a new spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
   const spot = await Spot.create({ userId:req.user.id, address, city, state, country, lat, lng, name, description, price});
-  res.json(spot);
+  res.status(201).json(spot);
 })
 
 // Edit a spot by checking if it exists, checking if user is the owner, grabbing data to update, then returning updated spot
@@ -100,7 +103,7 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   spot.price = price;
   await spot.save();
   const updatedSpot = await Spot.findByPk(id);
-  res.json(updatedSpot);
+  res.status(200).json(updatedSpot);
 });
 
 
@@ -128,12 +131,12 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
     ],
   });
   if(!spot) {
-    return res.status(404).json({error: 'Spot does not exist'})
+    return res.status(404).json({error: 'Spot could not be found'})
   };
   spot.dataValues.numReviews = req.numReviews;
   spot.dataValues.avgStarRating = req.avgStarRating;
 
-  res.json(spot);
+  res.status(200).json(spot);
 });
 
 // Add an Image to a Spot based on the Spot's id
@@ -142,14 +145,14 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const spot = await Spot.findByPk(spotId);
   if(!spot) {
-    return res.status(404).json({error: 'Spot does not exist'})
+    return res.status(404).json({error: 'Spot could not be found'})
   };
   if (spot.userId !== userId) {
     return res.status(403).json({ error: 'Unauthorized access' });
   };
   const { url, preview } = req.body;
   const image = await Image.create({spotId, url, preview, imageableId: spot.id, imageableType: 'Spot'});
-  return res.json({
+  return res.status(200).json({
     id: image.id,
     url: image.url,
     preview: image.preview,
@@ -160,6 +163,10 @@ router.post('/:id/images', requireAuth, async (req, res) => {
 // Get all Reviews by a Spot's id
 router.get('/:id/reviews', async (req, res) => {
   const spotId = req.params.id;
+  const spot = await Spot.findByPk(spotId);
+  if (!spot) {
+    return res.status(404).json({ error: 'Spot could not be found' });
+  };
   const reviews = await Review.findAll({
     where: {spotId},
     include: [
@@ -178,7 +185,7 @@ router.get('/:id/reviews', async (req, res) => {
   if (reviews.length === 0) {
     return res.status(404).json({ error: 'No reviews exist for this spot' });
   }
-  return res.json(reviews)
+  return res.status(200).json(reviews)
 })
 
 // 28 Get all Bookings for a Spot based on the Spot's id
@@ -227,7 +234,7 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const spot = await Spot.findByPk(spotId);
   if (!spot) {
-    return res.status(404).json({ error: 'Spot does not exist' });
+    return res.status(404).json({ error: 'Could not find a Spot with the specified id' });
   };
   if (spot.userId === userId) {
     return res.status(403).json({ error: 'You cannot book your own spot' });
@@ -241,7 +248,7 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
     }
   });
   if (existingBooking) {
-    return res.status(403).json({ error: 'A booking already exists for the specified dates' });
+    return res.status(403).json({ error: 'Sorry, this spot is already booked for the specified dates' });
   }
   const booking = await Booking.create({
     userId,
@@ -249,7 +256,7 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
     startDate,
     endDate
   });
-  return res.json({
+  return res.status(200).json({
     id: booking.id,
     userId: booking.userId,
     spotId: booking.spotId,
@@ -281,7 +288,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
     return res.status(403).json({ error: 'Review already exists for this spot' });
   }
   const review = await Review.create({ userId, spotId, stars, reviewText: req.body.review });
-  return res.json({
+  return res.status(200).json({
     id: review.id,
     stars: review.stars,
     reviewText: review.reviewText
@@ -294,25 +301,25 @@ router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
     const image = await Image.findByPk(imageId);
     if(!image) {
-      return res.status(404).json({error: 'Image does not exist'})
+      return res.status(404).json({error: 'Review Image could not be found'})
     };
     await image.destroy();
-    res.json({message: "Image successfully deleted"})
+    res.status(200).json({message: "Successfully deleted"})
 });
 
 
 // Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
-router.delete(':id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
   const spot = await Spot.findByPk(id);
   if (!spot) {
-    const error = new Error('Spot not found');
+    const error = new Error('Spot could not be found');
     error.status = 404;
     throw error;
     }
   await spot.destroy();
-  res.json({ message: 'Spot successfully deleted' });
+  res.status(200).json({ message: 'Successfully deleted' });
   }
 );
 
@@ -347,7 +354,6 @@ router.get('/', async (req, res) => {
   if (minPrice && maxPrice) {
     where.price = { [Op.between]: [minPrice, maxPrice] };
   };
-  // res.cookie('XSRF-TOKEN', req.csrfToken());
   const spots = await Spot.findAll({
     include: [
       {
@@ -357,11 +363,6 @@ router.get('/', async (req, res) => {
       }
     ],
     where,
-    // group: [
-    //   'Spot.id',
-    //   'SpotImages.id'
-    // ],
-    // Limit size and offset page (page - 1) * size
     limit: size,
     offset: (page - 1) * size
   });

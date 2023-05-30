@@ -261,7 +261,7 @@ Returns all the spots.
       "Spots": [
         {
           "id": 1,
-          "ownerId": 1,
+          "userId": 1,
           "address": "123 Disney Lane",
           "city": "San Francisco",
           "state": "California",
@@ -287,7 +287,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/spots
+  * URL: /users/spots
   * Body: none
 
 * Successful Response
@@ -301,7 +301,7 @@ Returns all the spots owned (created) by the current user.
       "Spots": [
         {
           "id": 1,
-          "ownerId": 1,
+          "userId": 1,
           "address": "123 Disney Lane",
           "city": "San Francisco",
           "state": "California",
@@ -339,7 +339,7 @@ Returns the details of a spot specified by its id.
     ```json
     {
       "id": 1,
-      "ownerId": 1,
+      "userId": 1,
       "address": "123 Disney Lane",
       "city": "San Francisco",
       "state": "California",
@@ -381,7 +381,7 @@ Returns the details of a spot specified by its id.
 
     ```json
     {
-      "message": "Spot couldn't be found"
+      "message": "Spot could not be found"
     }
     ```
 
@@ -420,7 +420,7 @@ Creates and returns a new spot.
     ```json
     {
       "id": 1,
-      "ownerId": 1,
+      "userId": 1,
       "address": "123 Disney Lane",
       "city": "San Francisco",
       "state": "California",
@@ -488,7 +488,8 @@ Create and return a new image for a spot specified by id.
     {
       "id": 1,
       "url": "image url",
-      "preview": true
+      "preview": true,
+      "imageableType": "Spot"
     }
     ```
 
@@ -500,7 +501,7 @@ Create and return a new image for a spot specified by id.
 
     ```json
     {
-      "message": "Spot couldn't be found"
+      "message": "Spot could not be found"
     }
     ```
 
@@ -540,7 +541,7 @@ Updates and returns an existing spot.
     ```json
     {
       "id": 1,
-      "ownerId": 1,
+      "userId": 1,
       "address": "123 Disney Lane",
       "city": "San Francisco",
       "state": "California",
@@ -586,7 +587,7 @@ Updates and returns an existing spot.
 
     ```json
     {
-      "message": "Spot couldn't be found"
+      "message": "Spot could not be found"
     }
     ```
 
@@ -621,7 +622,7 @@ Deletes an existing spot.
 
     ```json
     {
-      "message": "Spot couldn't be found"
+      "message": "Spot could not be found"
     }
     ```
 
@@ -634,7 +635,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/reviews
+  * URL: /users/reviews
   * Body: none
 
 * Successful Response
@@ -661,7 +662,7 @@ Returns all the reviews written by the current user.
           },
           "Spot": {
             "id": 1,
-            "ownerId": 1,
+            "userId": 1,
             "address": "123 Disney Lane",
             "city": "San Francisco",
             "state": "California",
@@ -734,7 +735,7 @@ Returns all the reviews that belong to a spot specified by id.
 
     ```json
     {
-      "message": "Spot couldn't be found"
+      "message": "Spot could not be found"
     }
     ```
 
@@ -855,11 +856,11 @@ Create and return a new image for a review specified by id.
 
     ```json
     {
-      "message": "Review couldn't be found"
+      "message": "Review could not be found"
     }
     ```
 
-* Error response: Cannot add any more images because there is a maximum of 10
+* Error response: Cannot add any more images because there is a maximum of 4
   images per resource
   * Status Code: 403
   * Headers:
@@ -934,7 +935,7 @@ Update and return an existing review.
 
     ```json
     {
-      "message": "Review couldn't be found"
+      "message": "Review could not be found"
     }
     ```
 
@@ -969,7 +970,7 @@ Delete an existing review.
 
     ```json
     {
-      "message": "Review couldn't be found"
+      "message": "Review could not be found"
     }
     ```
 
@@ -982,7 +983,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /user/bookings
+  * URL: /bookings
   * Body: none
 
 * Successful Response
@@ -999,7 +1000,7 @@ Return all the bookings that the current user has made.
           "spotId": 1,
           "Spot": {
             "id": 1,
-            "ownerId": 1,
+            "userId": 1,
             "address": "123 Disney Lane",
             "city": "San Francisco",
             "state": "California",
@@ -1092,7 +1093,7 @@ Return all the bookings for a spot specified by id.
 Create and return a new booking from a spot specified by id.
 
 * Require Authentication: true
-* Require proper authorization: Spot must NOT belong to the current user
+* Require proper authorization: You cannot book your own spot
 * Request
   * Method: POST
   * URL: /spots/:id/bookings
@@ -1291,7 +1292,7 @@ Delete an existing booking.
 
     ```json
     {
-      "message": "Booking couldn't be found"
+      "message": "Booking could not be found"
     }
     ```
 
@@ -1375,7 +1376,7 @@ Delete an existing image for a Review.
 
     ```json
     {
-      "message": "Review Image couldn't be found"
+      "message": "Review Image could not be found"
     }
     ```
 
@@ -1409,7 +1410,7 @@ Return spots filtered by query parameters.
       "Spots": [
         {
           "id": 1,
-          "ownerId": 1,
+          "userId": 1,
           "address": "123 Disney Lane",
           "city": "San Francisco",
           "state": "California",

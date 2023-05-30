@@ -32,15 +32,15 @@ router.put('/:id', requireAuth, validateReview, async (req, res) => {
       },
     });
   if (!existingReview) {
-    return res.status(404).json({ error: 'Review not found' });
+    return res.status(404).json({ error: 'Review could not be found' });
   }
     if (existingReview.userId !== userId) {
-      return res.status(403).json({ error: 'Unauthorized' });
+      return res.status(403).json({ error: 'Review must belong to the current user' });
     }
     existingReview.review = review;
     existingReview.stars = stars;
     await existingReview.save();
-    return res.json({
+    return res.status(200).json({
       id: existingReview.id,
       userId: existingReview.userId,
       spotId: existingReview.spotId,
@@ -57,19 +57,19 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const review = await Review.findByPk(reviewId);
   if(!review) {
-    return res.status(404).json({error: 'Review does not exist'})
+    return res.status(404).json({error: 'Review could not be found'})
   };
   if (review.userId !== userId) {
-    return res.status(403).json({ error: 'Unauthorized access' });
+    return res.status(403).json({ error: 'Review must belong to the current user' });
   };
   const maxImages = 4;
   const imageCount = await Image.findAll({ where: { imageableId: review.id, imageableType: 'Review' } });
   if (imageCount.length >= maxImages) {
-    return res.status(403).json({ message: 'A max of 4 images is allowed per review.' });
+    return res.status(403).json({ message: 'Maximum number of images for this resource was reached' });
   };
   const { url, preview } = req.body;
   const image = await Image.create({ url, preview, imageableId: reviewId, imageableType: 'Review'});
-  return res.json({
+  return res.status(200).json({
     id: image.id,
     url: image.url,
     preview: image.preview
@@ -102,13 +102,13 @@ router.delete('/:id', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const review = await Review.findByPk(reviewId);
   if (!review) {
-    return res.status(404).json({ error: 'Review does not exist' });
+    return res.status(404).json({ error: 'Review could not be found' });
   }
   if (review.userId !== userId) {
-    return res.status(403).json({ error: 'Unauthorized access' });
+    return res.status(403).json({ error: 'Review must belong to the current user' });
   }
   await review.destroy();
-  return res.json({ message: 'Review deleted successfully' });
+  return res.status(200).json({ message: 'Successfully deleted' });
 });
 
 module.exports = router;
