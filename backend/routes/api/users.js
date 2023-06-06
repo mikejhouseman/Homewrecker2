@@ -67,6 +67,24 @@ router.post(
     });
   }
 );
+
+// 04 Get current user
+router.get('/current', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const user = await User.findOne({
+    where: {
+      id: userId,
+    },
+    attributes: ['id', 'email', 'username', 'firstName', 'lastName'],
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  return res.status(200).json({ user });
+});
+
 // Get all reviews by user
 router.get('/reviews', requireAuth, async (req, res) => {
   const userId = req.user.id;
@@ -94,7 +112,7 @@ router.get('/reviews', requireAuth, async (req, res) => {
   return res.status(200).json(reviews);
 });
 
-// Get all current user spots
+// 10 Get all current user spots
 router.get('/spots', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const spots = await Spot.findAll({
@@ -116,7 +134,26 @@ router.get('/spots', requireAuth, async (req, res) => {
     'Reviews.id'
   ],
   });
-  return res.status(200).json(spots)
+  const response = spots.map((spot) => {
+    return {
+      id: spot.id,
+      userId: spot.userId,
+      address: spot.address,
+      city: spot.city,
+      state: spot.state,
+      country: spot.country,
+      lat: spot.lat,
+      lng: spot.lng,
+      name: spot.name,
+      description: spot.description,
+      price: spot.price,
+      updatedAt: spot.updatedAt,
+      createdAt: spot.createdAt,
+      avgRating: spot.dataValues.avgRating || 0
+    };
+  });
+
+  return res.status(200).json({ Spots: response });
 });
 
 module.exports = router;

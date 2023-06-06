@@ -160,7 +160,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   })
 });
 
-// Get all Reviews by a Spot's id
+// 20 Get all Reviews by a Spot's id
 router.get('/:id/reviews', async (req, res) => {
   const spotId = req.params.id;
   const spot = await Spot.findByPk(spotId);
@@ -323,11 +323,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
   }
 );
 
-// 9. Get all spots
-router.get('/', async (req, res) => {
-  const spots = await Spot.findAll();
-  res.status(200).json({spots});
-});
+
 
 // 16. Get all spots w/ query filters
 router.get('/', async (req, res) => {
@@ -366,6 +362,17 @@ router.get('/', async (req, res) => {
     limit: size,
     offset: (page - 1) * size
   });
+  for (const spot of spots) {
+    const avgReview = await Review.findOne({
+      attributes: [
+        [sequelize.fn('AVG', sequelize.col('stars')), 'avgRating'],
+      ],
+      where: {
+        spotId: spot.id,
+      },
+    });
+    spot.dataValues.avgReview = avgReview.dataValues.avgRating;
+  }
   res.status(200).json({Spots: spots, page, size});
   } catch (error) {
     console.error('Error retrieving all spots', error);
