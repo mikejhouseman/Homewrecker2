@@ -22,10 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       });
       Spot.hasMany(models.Booking, {
         foreignKey: 'spotId',
-        // as: 'bookings'
+        onDelete: 'CASCADE',
+        hooks: true
       });
       Spot.hasMany(models.Review, {
         foreignKey: 'spotId',
+        onDelete: 'CASCADE',
+        hooks: true
       });
       Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
@@ -34,6 +37,8 @@ module.exports = (sequelize, DataTypes) => {
         scope: {
           imageableType: 'Spot'
         },
+        onDelete: 'CASCADE',
+        hooks: true
       });
     }
   }
@@ -66,22 +71,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
       validate: {
-        len: [2, 2],
+        len: [2, 100],
         isAlpha: true,
-        isUppercase: true,
-        isValidUSState(value) {
-          const usStates = [
-            'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI','ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI','MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-          ];
-          if (!usStates.includes(value)) {
-            throw new Error('Please enter a valid US postal code');
-          }
-        },
-        reqdIfCountryIsUS(value) {
-          if(!value && this.country === 'United States') {
-            throw new Error('State is required for spots in the United States');
-          }
-        }
+        // isUppercase: true,
+        // isValidUSState(value) {
+        //   const usStates = [
+        //     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI','ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI','MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
+        //   ];
+        //   if (!usStates.includes(value)) {
+        //     throw new Error('Please enter a valid US postal code');
+        //   }
+        // },
+        // reqdIfCountryIsUS(value) {
+        //   if(!value && this.country === 'United States') {
+        //     throw new Error('State is required for spots in the United States');
+        //   }
+        // }
       }
     },
     country:  {

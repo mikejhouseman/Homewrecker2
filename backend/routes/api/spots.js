@@ -318,6 +318,9 @@ router.delete('/:id', requireAuth, async (req, res) => {
     error.status = 404;
     throw error;
     }
+  if (spot.userId !== userId) {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    };
   await spot.destroy();
   res.status(200).json({ message: 'Successfully deleted' });
   }

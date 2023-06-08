@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
   Booking.init({
     id: {
       type: DataTypes.INTEGER,
-      primaryKey: true, 
+      primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         isMinOneNight(value) {
           if(value && this.startDate && new Date(value) <= new Date(this.startDate).setDate(
-            new Date(this.startDate).getDate()+1
+            new Date(this.startDate).getDate()
             )
           )
         {
