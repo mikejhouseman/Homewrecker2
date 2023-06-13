@@ -9,11 +9,6 @@ const Image = require('./images')
 
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
       Spot.belongsTo(models.User, {
@@ -73,20 +68,6 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [2, 100],
         isAlpha: true,
-        // isUppercase: true,
-        // isValidUSState(value) {
-        //   const usStates = [
-        //     'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI','ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI','MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-        //   ];
-        //   if (!usStates.includes(value)) {
-        //     throw new Error('Please enter a valid US postal code');
-        //   }
-        // },
-        // reqdIfCountryIsUS(value) {
-        //   if(!value && this.country === 'United States') {
-        //     throw new Error('State is required for spots in the United States');
-        //   }
-        // }
       }
     },
     country:  {

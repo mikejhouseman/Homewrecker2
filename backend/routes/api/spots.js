@@ -21,7 +21,7 @@ const validateSpot = [
     .isLength({ min: 2, max: 50 })
     .withMessage('City is required'),
   check('state')
-    .isLength({ min: 2, max: 2 })
+    .isLength({ min: 2, max: 100 })
     .withMessage('State is required'),
   check('country')
   .exists({ checkFalsy: true })
