@@ -34,7 +34,7 @@ check('lat')
     .withMessage('Longitude is not valid'),
   check('name')
     .isLength({ min: 2, max: 50 })
-    .withMessage('Name must be less than 50 characters'),
+    .withMessage('Name is required and must be less than 50 characters'),
   check('description')
     .exists({ checkFalsy: true })
     .withMessage('Description is required'),
@@ -70,14 +70,14 @@ const reviewCounter = async (req, res, next) => {
     next();
   };
 
-// Create and return a new spot
+// 12 Create and return a new spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
   const spot = await Spot.create({ userId:req.user.id, address, city, state, country, lat, lng, name, description, price});
   res.status(201).json(spot);
 })
 
-// Edit a spot by checking if it exists, checking if user is the owner, grabbing data to update, then returning updated spot
+// 14 Edit a spot by checking if it exists, checking if user is the owner, grabbing data to update, then returning updated spot
 router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   const { id } = req.params;
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
@@ -108,7 +108,7 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
 
 
 
-// Get details for a Spot from an id
+// 11 Get details for a Spot from an id
 router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
   const spotId = req.params.id;
   const spot = await Spot.findByPk(spotId, {
@@ -139,7 +139,7 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
   res.status(200).json(spot);
 });
 
-// Add an Image to a Spot based on the Spot's id
+// 13 Add an Image to a Spot based on the Spot's id
 router.post('/:id/images', requireAuth, async (req, res) => {
   const spotId = req.params.id;
   const userId = req.user.id;
@@ -269,7 +269,7 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
 
 
 
-// Add Review to a Spot based on the Spot's id
+// 21 Add Review to a Spot based on the Spot's id
 router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   const spotId = req.params.id;
   const userId = req.user.id;
@@ -296,7 +296,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 });
 
 
-// Delete an Image for a Spot
+// 34 Delete an Image for a Spot
 router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
     const image = await Image.findByPk(imageId);
@@ -308,7 +308,7 @@ router.delete('/images/:imageId', requireAuth, async (req, res) => {
 });
 
 
-// Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
+// 15 Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
 router.delete('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const userId = req.user.id;
@@ -374,7 +374,7 @@ router.get('/', async (req, res) => {
         spotId: spot.id,
       },
     });
-    spot.dataValues.avgReview = avgReview.dataValues.avgRating;
+    spot.dataValues.avgRating = avgReview.dataValues.avgRating;
   }
   res.status(200).json({Spots: spots, page, size});
   } catch (error) {

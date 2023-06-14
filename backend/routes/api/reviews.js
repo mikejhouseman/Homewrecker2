@@ -21,7 +21,7 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-// Update and return an existing review.
+// 23 Update and return an existing review.
 router.put('/:id', requireAuth, validateReview, async (req, res) => {
   const reviewId = req.params.id;
   const { review, stars } = req.body;
@@ -51,7 +51,7 @@ router.put('/:id', requireAuth, validateReview, async (req, res) => {
     });
 });
 
-// Add an Image to a Review based on the Review's id
+// 22 Add an Image to a Review based on the Review's id
 router.post('/:id/images', requireAuth, async (req, res) => {
   const reviewId = req.params.id;
   const userId = req.user.id;
@@ -77,26 +77,22 @@ router.post('/:id/images', requireAuth, async (req, res) => {
 });
 
 // 35 Delete an Image for a Review
-router.delete('/:reviewId/images/:imageId', requireAuth, async (req, res) => {
-  const reviewId = req.params.reviewId;
-  const imageId = req.params.imageId;
+router.delete('/images/:reviewImageId', requireAuth, async (req, res) => {
+  const reviewImageId = req.params.reviewImageId;
   const userId = req.user.id;
-  const review = await Review.findByPk(reviewId);
-  if (!review) {
-    return res.status(404).json({ error: 'Review does not exist' });
-  }
-  if (review.userId !== userId) {
+  const review = await Review.findByPk(image.imageableId);
+  if (!review || review.userId !== userId) {
     return res.status(403).json({ error: 'Unauthorized access' });
   }
-  const image = await Image.findOne({ where: { id: imageId, imageableId: reviewId } });
+  const image = await Image.findByPk(reviewImageId);
   if (!image) {
-    return res.status(404).json({ error: 'Image does not exist for the review' });
+    return res.status(404).json({ error: 'Image does not exist' });
   }
   await image.destroy();
   return res.json({ message: 'Image deleted successfully' });
 });
 
-// Delete a review
+// 31 Delete a review
 router.delete('/:id', requireAuth, async (req, res) => {
   const reviewId = req.params.id;
   const userId = req.user.id;

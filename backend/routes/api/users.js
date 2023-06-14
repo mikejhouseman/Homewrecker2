@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-
+const { Op } = require('sequelize');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { User, Review, Spot, Image, Booking, sequelize } = require('../../db/models');
 const { check } = require('express-validator');
@@ -18,7 +18,7 @@ const validateSignup = [
   check('firstName')
     .exists({ checkFalsy: true })
     .isLength({ min: 1 })
-    .withMessage('Password must be 1 character or more.'),
+    .withMessage('First name must be 1 character or more.'),
   check('lastName')
   .not()
   .isEmail()
@@ -50,40 +50,32 @@ router.post(
   async (req, res) => {
     const { email, password, username, firstName, lastName  } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ email }, { username }]
+      }
+    });
+    if (existingUser) {
+      return res.status(500).json({ message: 'Invalid credentials: email or username already in use.' });
+    }
     const user = await User.create({ email, username, hashedPassword, firstName, lastName });
 
     const safeUser = {
       id: user.id,
-      email: user.email,
-      username: user.username,
       firstName: user.firstName,
-      lastName : user.lastName ,
+      lastName : user.lastName,
+      email: user.email,
     };
 
     await setTokenCookie(res, safeUser);
 
-    return res.json({
+    return res.status(200).json({
       user: safeUser
     });
   }
 );
 
-// 04 Get current user
-router.get('/current', requireAuth, async (req, res) => {
-  const userId = req.user.id;
-  const user = await User.findOne({
-    where: {
-      id: userId,
-    },
-    attributes: ['id', 'email', 'username', 'firstName', 'lastName'],
-  });
 
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  return res.status(200).json({ user });
-});
 
 // Get all reviews by user
 router.get('/reviews', requireAuth, async (req, res) => {
