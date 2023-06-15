@@ -301,6 +301,7 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 });
 
 
+
 // 34 Delete an Image for a Spot
 router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
