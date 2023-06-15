@@ -77,32 +77,7 @@ router.post(
 
 
 
-// Get all reviews by user
-router.get('/reviews', requireAuth, async (req, res) => {
-  const userId = req.user.id;
-  const reviews = await Review.findAll({
-    where: {
-      userId,
-    },
-    include: [
-      {
-        model: User,
-        attributes: ['id', 'firstName', 'lastName'],
-      },
-      {
-        model: Spot,
-        attributes: ['id', 'userId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'],
-      },
-      {
-        model: Image,
-        as: 'ReviewImages',
-        attributes: ['id', 'url']
-      },
-    ],
-    attributes: ['id', 'userId', 'spotId', 'reviewText', 'stars', 'createdAt', 'updatedAt']
-  });
-  return res.status(200).json(reviews);
-});
+
 
 // 10 Get all current user spots
 router.get('/spots', requireAuth, async (req, res) => {

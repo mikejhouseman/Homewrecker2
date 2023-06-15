@@ -10,8 +10,8 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
-// 27 Get all bookings by current user
-router.get('/', requireAuth, async (req, res) => {
+// 27 Get current user's bookings
+router.get('/current', requireAuth, async (req, res) => {
   const userId = req.user.id;
   const bookings = await Booking.findAll({
     where: {userId},

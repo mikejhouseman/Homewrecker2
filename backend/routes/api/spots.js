@@ -49,7 +49,7 @@ const validateReview = [
   check('stars')
   .isInt({ min: 1, max: 5 })
   .withMessage('Please provide a star rating between 1 and 5.'),
-  check('review')
+  check('reviewText')
     .isLength({ min: 2, max: 1000 })
     .withMessage('Please provide a review between 2 and 500 characters.'),
   handleValidationErrors,
@@ -216,7 +216,11 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
       endDate: booking.endDate,
       createdAt: booking.createdAt,
       updatedAt: booking.updatedAt,
-      User: booking.User,
+      User: {
+        id: booking.User.id,
+        firstName: booking.User.firstName,
+        lastName: booking.User.lastName,
+      },
     }));
   } else {
     responseData = bookings.map((booking) => ({
@@ -225,7 +229,8 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
       endDate: booking.endDate,
     }));
   }
-  return res.json(responseData);
+
+  return res.status(200).json(responseData);
 });
 
 // 29 Create a Booking from a Spot based on the Spot's id

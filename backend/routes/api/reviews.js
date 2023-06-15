@@ -15,16 +15,43 @@ const validateReview = [
   check('stars')
   .isInt({ min: 1, max: 5 })
   .withMessage('Please provide a star rating between 1 and 5.'),
-  check('review')
+  check('reviewText')
     .isLength({ min: 2, max: 1000 })
     .withMessage('Please provide a review between 2 and 500 characters.'),
   handleValidationErrors,
 ];
 
-// 23 Update and return an existing review.
+// 19 Get all reviews by user
+router.get('/current', requireAuth, async (req, res) => {
+  const userId = req.user.id;
+  const reviews = await Review.findAll({
+    where: {
+      userId,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+      {
+        model: Spot,
+        attributes: ['id', 'userId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price', 'previewImage'],
+      },
+      {
+        model: Image,
+        as: 'ReviewImages',
+        attributes: ['id', 'url']
+      },
+    ],
+    attributes: ['id', 'userId', 'spotId', 'reviewText', 'stars', 'createdAt', 'updatedAt']
+  });
+  return res.status(200).json(reviews);
+});
+
+// 23 Edit a review
 router.put('/:id', requireAuth, validateReview, async (req, res) => {
   const reviewId = req.params.id;
-  const { review, stars } = req.body;
+  const { reviewText, stars } = req.body;
   const userId = req.user.id;
   const existingReview = await Review.findOne({
       where: {
@@ -37,14 +64,14 @@ router.put('/:id', requireAuth, validateReview, async (req, res) => {
     if (existingReview.userId !== userId) {
       return res.status(403).json({ error: 'Review must belong to the current user' });
     }
-    existingReview.review = review;
+    existingReview.reviewText = reviewText;
     existingReview.stars = stars;
     await existingReview.save();
     return res.status(200).json({
       id: existingReview.id,
       userId: existingReview.userId,
       spotId: existingReview.spotId,
-      review: existingReview.review,
+      reviewText: existingReview.reviewText,
       stars: existingReview.stars,
       createdAt: existingReview.createdAt,
       updatedAt: existingReview.updatedAt,
