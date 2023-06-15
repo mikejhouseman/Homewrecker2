@@ -108,13 +108,14 @@ router.delete('/images/:reviewImageId', requireAuth, async (req, res) => {
   const reviewImageId = req.params.reviewImageId;
   const userId = req.user.id;
   const review = await Review.findByPk(image.imageableId);
-  if (!review || review.userId !== userId) {
-    return res.status(403).json({ error: 'Unauthorized access' });
-  }
   const image = await Image.findByPk(reviewImageId);
   if (!image) {
     return res.status(404).json({ error: 'Image does not exist' });
+  };
+  if (!review || review.userId !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access' });
   }
+
   await image.destroy();
   return res.json({ message: 'Image deleted successfully' });
 });
