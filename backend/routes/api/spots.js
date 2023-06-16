@@ -20,9 +20,9 @@ const validateSpot = [
     .exists({ checkFalsy: true })
     .isLength({ min: 2, max: 50 })
     .withMessage('City is required'),
-  check('state')
-    .isLength({ min: 2, max: 100 })
-    .withMessage('State is required'),
+  // check('state')
+  //   .isLength({ min: 2, max: 100 })
+  //   .withMessage('State is required'),
   check('country')
   .exists({ checkFalsy: true })
   .withMessage('Country is required'),
@@ -302,14 +302,14 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 // 34 Delete an Image for a Spot
   router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
-    // const userId = req.user.id;
+    const userId = req.user.id;
     const image = await Image.findByPk(imageId);
     if (!image) {
         return res.status(404).json({ error: 'Spot image does not exist' });
     };
-    // if (image.userId !== userId) {
-    //     return res.status(403).json({ error: 'Unauthorized access' });
-    // }
+    if (image.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized access' });
+    }
     await image.destroy();
     res.status(200).json({ message: 'Image deleted successfully' });
 });
