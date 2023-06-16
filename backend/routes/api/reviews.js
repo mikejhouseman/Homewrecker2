@@ -45,6 +45,9 @@ router.get('/current', requireAuth, async (req, res) => {
     ],
     attributes: ['id', 'userId', 'spotId', 'reviewText', 'stars', 'createdAt', 'updatedAt']
   });
+  reviews.forEach(review => {
+    delete review.Spot.dataValues.previewImage;
+  });
   return res.status(200).json(reviews);
 });
 
@@ -99,7 +102,6 @@ router.post('/:id/images', requireAuth, async (req, res) => {
   return res.status(200).json({
     id: image.id,
     url: image.url
-    // preview: image.preview
   })
 });
 

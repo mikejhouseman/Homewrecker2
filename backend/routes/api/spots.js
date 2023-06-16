@@ -135,7 +135,7 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
   };
   spot.dataValues.numReviews = req.numReviews;
   spot.dataValues.avgStarRating = req.avgStarRating;
-
+  delete spot.dataValues.previewImage;
   res.status(200).json(spot);
 });
 

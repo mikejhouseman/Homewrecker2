@@ -23,6 +23,9 @@ router.get('/current', requireAuth, async (req, res) => {
     ],
     attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
   });
+  bookings.forEach(booking => {
+    delete booking.Spot.dataValues.previewImage;
+  });
   return res.status(200).json(bookings)
 });
 
