@@ -48,18 +48,18 @@ router.post('/', validateLogin, async (req, res, next) => {
 );
 
 // 04 Get current user
-router.get('/', requireAuth, async (req, res) => {
-  const userId = req.user.id;
-  const user = await User.findOne({
-    where: {
-      id: userId,
-    },
-    attributes: ['id', 'firstName', 'lastName', 'email', 'username'],
-  });
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
+router.get('/', async (req, res) => {
+  if(req.user){
+    const userId = req.user.id;
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+      attributes: ['id', 'firstName', 'lastName', 'email', 'username'],
+    });
+    return res.status(200).json({ user });
   }
-  return res.status(200).json({ user });
+  else return res.status(404).json({ "user": null });
 });
 
 

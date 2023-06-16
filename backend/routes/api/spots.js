@@ -274,7 +274,7 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
 
 
 
-// 21 Add Review to a Spot based on the Spot's id
+// 21 Create a Review to a Spot based on the Spot's id
 router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   const spotId = req.params.id;
   const userId = req.user.id;
@@ -292,12 +292,9 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
   if (existingReview) {
     return res.status(403).json({ error: 'Review already exists for this spot' });
   }
-  const review = await Review.create({ userId, spotId, stars, reviewText: req.body.review });
-  return res.status(200).json({
-    id: review.id,
-    stars: review.stars,
-    reviewText: review.reviewText
-  });
+  const review = await Review.create({ userId, spotId, stars, reviewText: req.body.reviewText });
+  // console.log(review)
+  return res.status(200).json(review);
 });
 
 
@@ -305,14 +302,14 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 // 34 Delete an Image for a Spot
   router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
-    const userId = req.user.id;
+    // const userId = req.user.id;
     const image = await Image.findByPk(imageId);
     if (!image) {
         return res.status(404).json({ error: 'Spot image does not exist' });
     };
-    if (image.userId !== userId) {
-        return res.status(403).json({ error: 'Unauthorized access' });
-    }
+    // if (image.userId !== userId) {
+    //     return res.status(403).json({ error: 'Unauthorized access' });
+    // }
     await image.destroy();
     res.status(200).json({ message: 'Image deleted successfully' });
 });

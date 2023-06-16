@@ -10,7 +10,7 @@ const Image = require('./images')
 module.exports = (sequelize, DataTypes) => {
   class Spot extends Model {
     static associate(models) {
-      // define association here
+
       Spot.belongsTo(models.User, {
         foreignKey: 'userId',
         as: 'Owner'
@@ -27,11 +27,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       Spot.hasMany(models.Image, {
         foreignKey: 'imageableId',
-        as: 'SpotImages',
         constraints: false,
         scope: {
           imageableType: 'Spot'
         },
+        as: 'SpotImages',
         onDelete: 'CASCADE',
         hooks: true
       });
@@ -127,14 +127,6 @@ module.exports = (sequelize, DataTypes) => {
         min: 0,
         len: [2, 5]
       }
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'id',
-      },
     },
     previewImage: {
       type: DataTypes.STRING

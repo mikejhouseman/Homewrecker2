@@ -21,6 +21,7 @@ module.exports = {
         name: 'Shoddy Apartment',
         description: 'Includes the printer from Office Space',
         price: 100.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       },
       {
         userId: 2,
@@ -34,6 +35,7 @@ module.exports = {
         description: 'A luxurious house with multiple china cabinets. \
         Great for Greek wedding parties and throwing stones in!',
         price: 500.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       },
       {
         userId: 3,
@@ -46,6 +48,7 @@ module.exports = {
         name: 'House of Cards',
         description: 'Sleep on the ground floor!',
         price: 200.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       },
       {
         userId: 4,
@@ -58,6 +61,7 @@ module.exports = {
         name: 'Leaning Tower',
         description: 'Tower? Hardly knew her!',
         price: 150.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       },
       {
         userId: 5,
@@ -70,6 +74,7 @@ module.exports = {
         name: 'Balsa Wood Hovel',
         description: 'Great for punching holes into walls',
         price: 300.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       },
       {
         userId: 6,
@@ -82,6 +87,7 @@ module.exports = {
         name: 'Thin Walls Apartment',
         description: 'A cozy apartment with walls thinner than prosciutto',
         price: 120.00,
+        previewImage: 'https://www.ft.com/__origami/service/image/v2/images/raw/http%3A%2F%2Fcom.ft.imagepublish.upp-prod-eu.s3.amazonaws.com%2F5ecccf40-b7e5-11e9-96bd-8e884d3ea203?dpr=1&fit=scale-down&source=next&width=700'
       }
   ], {});
     /**

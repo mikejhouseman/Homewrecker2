@@ -17,6 +17,7 @@ module.exports = {
       },
       imageableId: {
         type: Sequelize.INTEGER,
+        // onDelete: 'CASCADE'
       },
       url: {
         type: Sequelize.STRING
