@@ -303,16 +303,19 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 
 
 // 34 Delete an Image for a Spot
-router.delete('/images/:imageId', requireAuth, async (req, res) => {
+  router.delete('/images/:imageId', requireAuth, async (req, res) => {
     const imageId = req.params.imageId;
+    const userId = req.user.id;
     const image = await Image.findByPk(imageId);
-    if(!image) {
-      return res.status(404).json({error: 'Review Image could not be found'})
+    if (!image) {
+        return res.status(404).json({ error: 'Spot image does not exist' });
     };
+    if (image.userId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized access' });
+    }
     await image.destroy();
-    res.status(200).json({message: "Successfully deleted"})
+    res.status(200).json({ message: 'Image deleted successfully' });
 });
-
 
 // 15 Delete a spot by finding spot by id, checking if it exists, then deleting and returning a message
 router.delete('/:id', requireAuth, async (req, res) => {
@@ -360,13 +363,13 @@ router.get('/', async (req, res) => {
     where.price = { [Op.between]: [minPrice, maxPrice] };
   };
   const spots = await Spot.findAll({
-    include: [
-      {
-        model: Image,
-        as: 'SpotImages',
-        attributes: ['id']
-      }
-    ],
+    // include: [
+    //   {
+    //     model: Image,
+    //     as: 'SpotImages',
+    //     attributes: ['id']
+    //   }
+    // ],
     where,
     limit: size,
     offset: (page - 1) * size

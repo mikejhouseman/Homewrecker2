@@ -44,10 +44,7 @@ check('lastName')
 
 
 // Sign up
-router.post(
-  '',
-  validateSignup,
-  async (req, res) => {
+router.post('/', validateSignup, async (req, res) => {
     const { email, password, username, firstName, lastName  } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
     const existingUser = await User.findOne({

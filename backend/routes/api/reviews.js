@@ -78,7 +78,7 @@ router.put('/:id', requireAuth, validateReview, async (req, res) => {
     });
 });
 
-// 22 Add an Image to a Review based on the Review's id
+// 22 Create an Image for a Review based on the Review's id
 router.post('/:id/images', requireAuth, async (req, res) => {
   const reviewId = req.params.id;
   const userId = req.user.id;
@@ -107,18 +107,21 @@ router.post('/:id/images', requireAuth, async (req, res) => {
 router.delete('/images/:reviewImageId', requireAuth, async (req, res) => {
   const reviewImageId = req.params.reviewImageId;
   const userId = req.user.id;
-  const review = await Review.findByPk(image.imageableId);
   const image = await Image.findByPk(reviewImageId);
   if (!image) {
-    return res.status(404).json({ error: 'Image does not exist' });
+    return res.status(404).json({ error: 'Review Image could not be found' });
   };
-  if (!review || review.userId !== userId) {
+  const review = await Review.findByPk(image.imageableId);
+  if (!review) {
+    return res.status(404).json({ error: 'Review could not be found' });
+  };
+  if (review.userId !== userId || image.userId !== userId) {
     return res.status(403).json({ error: 'Unauthorized access' });
   }
-
   await image.destroy();
-  return res.json({ message: 'Image deleted successfully' });
+  return res.status(200).json({ message: 'Successfully deleted' });
 });
+
 
 // 31 Delete a review
 router.delete('/:id', requireAuth, async (req, res) => {
