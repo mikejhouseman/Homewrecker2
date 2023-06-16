@@ -64,11 +64,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     state:  {
       type: DataTypes.STRING,
-      allowNull: true,
-      validate: {
-        len: [2, 100],
-        isAlpha: true,
-      }
+      allowNull: true
+      // validate: {
+      //   len: [2, 100],
+      //   isAlpha: true,
+      // }
     },
     country:  {
       type: DataTypes.STRING,
