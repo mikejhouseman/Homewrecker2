@@ -301,15 +301,19 @@ router.post('/:id/reviews', requireAuth, validateReview, async (req, res) => {
 
 // 34 Delete an Image for a Spot
   router.delete('/images/:imageId', requireAuth, async (req, res) => {
-    const imageId = req.params.imageId;
+    const spotImageId = req.params.imageId;
     const userId = req.user.id;
-    const image = await Image.findByPk(imageId);
+    const image = await Image.findByPk(spotImageId);
     if (!image) {
         return res.status(404).json({ error: 'Spot image does not exist' });
     };
-    if (image.userId !== userId) {
+    const spot = await Spot.findByPk(image.imageableId);
+    if (!spot) {
+      return res.status(404).json({ error: 'Spot could not be found' });
+    };
+    if (spot.userId !== userId) {
         return res.status(403).json({ error: 'Unauthorized access' });
-    }
+    };
     await image.destroy();
     res.status(200).json({ message: 'Image deleted successfully' });
 });
