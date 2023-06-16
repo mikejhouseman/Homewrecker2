@@ -102,7 +102,9 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   spot.description = description;
   spot.price = price;
   await spot.save();
-  const updatedSpot = await Spot.findByPk(id);
+  const updatedSpot = await Spot.findByPk(id, {
+    attributes: { exclude: ['previewImage'] }
+  });
   res.status(200).json(updatedSpot);
 });
 
