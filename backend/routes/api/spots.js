@@ -366,14 +366,8 @@ router.get('/', async (req, res) => {
     where.price = { [Op.between]: [minPrice, maxPrice] };
   };
   const spots = await Spot.findAll({
-    // include: [
-    //   {
-    //     model: Image,
-    //     as: 'SpotImages',
-    //     attributes: ['id']
-    //   }
-    // ],
     where,
+    attributes: { exclude: ['previewImage'] },
     limit: size,
     offset: (page - 1) * size
   });
