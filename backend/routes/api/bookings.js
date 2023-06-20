@@ -34,15 +34,20 @@ router.put('/:id', requireAuth, async (req, res) => {
   const { id } = req.params;
   const { startDate, endDate } = req.body;
   const userId = req.user.id;
+
   const booking = await Booking.findOne({
       where: {
-        id,
-        userId
+        id
       }
     });
-  if (!booking) {
-    return res.status(404).json({ error: 'Booking not found' });
-  };
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    };
+    if (booking.userId !== userId) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+
+
   if (booking.endDate < new Date()) {
       return res.status(400).json({ error: "Past bookings can't be modified" });
     }

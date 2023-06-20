@@ -1217,7 +1217,7 @@ Update and return an existing booking.
 
     ```json
     {
-      "message": "Booking couldn't be found"
+      "message": "Booking could not be found"
     }
     ```
 
