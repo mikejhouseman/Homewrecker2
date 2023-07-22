@@ -16,7 +16,7 @@ const validateLogin = [
     .withMessage('Please provide a password.'),
   handleValidationErrors
 ];
-
+// backend/routes/api/session.js
 // 5 Log in
 router.post('/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
