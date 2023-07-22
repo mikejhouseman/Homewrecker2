@@ -1,0 +1,31 @@
+
+// Path: TestingActions
+window.store.dispatch(
+  window.sessionActions.login({
+    credential: "demo@user.io",
+    password: "password",
+  })
+);
+
+// Path: TestingActions
+window.csrfFetch('/api/test', {
+  method: 'POST',
+  body: JSON.stringify({ credential: 'demo@user.io', password: 'password' })
+}).then(res => res.json()).then(data => console.log(data));
+
+// Path: TestingActions
+window.store.dispatch({ type: 'hello' });
+
+window.store.dispatch(window.sessionActions.restoreUser());
+
+
+// Test signup tunk action
+window.store.dispatch(
+  window.sessionActions.signup({
+    username: "NewUser",
+    firstName: "New",
+    lastName: "User",
+    email: "new@user.io",
+    password: "password",
+  })
+);
