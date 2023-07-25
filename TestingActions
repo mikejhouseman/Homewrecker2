@@ -1,5 +1,6 @@
 
 // Path: TestingActions
+// http://localhost:3000/login
 window.store.dispatch(
   window.sessionActions.login({
     credential: "demo@user.io",
@@ -19,7 +20,7 @@ window.store.dispatch({ type: 'hello' });
 window.store.dispatch(window.sessionActions.restoreUser());
 
 
-// Test signup tunk action
+// Test signup tunk action -- DOES NOT WORK
 window.store.dispatch(
   window.sessionActions.signup({
     username: "NewUser",
@@ -29,3 +30,9 @@ window.store.dispatch(
     password: "password",
   })
 );
+
+// Restore user thunk action
+window.store.dispatch(window.sessionActions.restoreUser());
+
+// Logout thunk action
+window.store.dispatch(window.sessionActions.logout());
