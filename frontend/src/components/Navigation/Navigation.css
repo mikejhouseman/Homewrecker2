@@ -1,0 +1,36 @@
+/* frontend/src/components/Navigation/Navigation.css */
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+li {
+  margin: 0 10px;
+}
+
+NavLink {
+  text-decoration: none;
+  color: #333; /* Change this color to your desired text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+NavLink:hover {
+  background-color: #f0f0f0; /* Change this color to your desired hover background color */
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: #333; /* Change this color to your desired text color */
+}
+
+button:hover {
+  text-decoration: underline;
+}
