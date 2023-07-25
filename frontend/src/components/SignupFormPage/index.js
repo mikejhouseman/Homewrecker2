@@ -1,7 +1,6 @@
 // Render a form with controlled inputs for the new user's username, firstName, lastName, email, and password, and confirm password fields. On submit of the form, validate that the confirm password is the same as the password fields, then dispatch the signup thunk action with the form input values. Make sure to handle and display errors from the signup thunk action if there are any. If the confirm password is not the same as the password, display an error message for this.
 
 // frontend/src/components/SignupFormPage/index.js
-
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";

@@ -1,1 +1,5 @@
 /* TODO Add site wide styles */
+body {
+  color: red;
+  margin-top: 5px;
+}
