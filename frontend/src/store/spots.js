@@ -1,5 +1,4 @@
 // // frontend/src/store/spots.js
-
 const LOAD_SPOTS = 'spots/LOAD_SPOTS';
 
 const loadSpots = (spots) => ({
@@ -8,15 +7,21 @@ const loadSpots = (spots) => ({
 });
 
 export const getSpots = () => async (dispatch) => {
-  const response = await fetch('/api/spots');
-
-  if (response.ok) {
-    const spots = [{ id: 1, name: 'Spot 1' }, { id: 2, name: 'Spot 2' }];
-    dispatch({ type: 'LOAD_SPOTS', spots });
+  try {
+    const response = await fetch('/api/spots');
+    if (!response.ok) {
+      throw new Error('Failed to fetch spots from the server.');
+    }
+    const { Spots } = await response.json(); // Update to extract the 'Spots' property
+    await dispatch(loadSpots(Spots)); // Use the extracted 'Spots' array
+  } catch (error) {
+    console.error('Error fetching spots:', error);
   }
 };
 
-const initialState = {};
+const initialState = {
+  list: [],
+};
 
 const sortList = (list) => {
   return list.sort((spotA, spotB) => {
@@ -24,10 +29,9 @@ const sortList = (list) => {
   }).map(spot => spot.id);
 };
 
-const spotsReducer = (state = initialState, action) => {
+const spotsReducer = (state = {}, action) => {
   switch (action.type) {
     case LOAD_SPOTS: {
-      console.log('action.spots:', action.spots);
       const allSpots = {};
       action.spots.forEach(spot => {
         allSpots[spot.id] = spot;

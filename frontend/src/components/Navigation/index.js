@@ -6,8 +6,8 @@ import ProfileButton from './ProfileButton';
 import * as sessionActions from '../../store/session';
 import './Navigation.css';
 
-function Navigation({ isLoaded }){
-  const sessionUser = useSelector(state => state.session.user);
+function Navigation({ isLoaded }) {
+  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
 
   const logout = (e) => {
@@ -18,10 +18,10 @@ function Navigation({ isLoaded }){
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div>
         <ProfileButton user={sessionUser} />
         <button onClick={logout}>Log Out</button>
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
@@ -35,7 +35,9 @@ function Navigation({ isLoaded }){
   return (
     <ul>
       <li>
-        <NavLink exact to="/">Home</NavLink>
+        <NavLink exact to="/">
+          Home
+        </NavLink>
       </li>
       {isLoaded && sessionLinks}
     </ul>

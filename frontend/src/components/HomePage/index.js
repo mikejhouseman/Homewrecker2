@@ -1,9 +1,7 @@
 // frontend/src/components/HomePage/index.js
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 import { getSpots } from '../../store/spots';
 import './HomePage.css';
 import Navigation from '../Navigation';
@@ -11,11 +9,12 @@ import ProfileButton from '../Navigation/ProfileButton';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const { spotId } = useParams();
-  const spots = useSelector(state => state.spots);
+  const spots = useSelector(state => state.spots.list);
+  console.log(spots);
+  const sessionUser = useSelector(state => state.session.user);
 
-  useEffect(() => {
-    dispatch(getSpots());
+  useEffect(  ()  => async () => {
+    await dispatch(getSpots());
   }, [dispatch]);
 
   return (
@@ -25,17 +24,15 @@ const HomePage = () => {
         <div className="home-page__content__spots">
           <h2>Spots</h2>
           <ul>
-            {/* Add a check for spots.list before mapping */}
-            {spots.list &&
-              spots.list.map(spotId => (
-                <li key={spotId}>
-                  <NavLink to={`/spots/${spotId}`}>{spots[spotId].name}</NavLink>
-                </li>
-              ))}
+            {spots?.map(spot => (
+              <li key={spot.id}>
+                <NavLink to={`/spots/${spot.id}`}>{spot.id}</NavLink>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
-      <ProfileButton />
+      {sessionUser && <ProfileButton key={sessionUser.id} />}
     </div>
   );
 };
