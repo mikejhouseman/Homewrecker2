@@ -10,7 +10,7 @@ import ProfileButton from '../Navigation/ProfileButton';
 const HomePage = () => {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spots.list);
-  console.log(spots);
+  // console.log(spots);
   const sessionUser = useSelector(state => state.session.user);
 
   useEffect(  ()  => async () => {
