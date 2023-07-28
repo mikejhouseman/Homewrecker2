@@ -52,6 +52,8 @@ router.post('/login', validateLogin, async (req, res, next) => {
 
 // 04 Get current user
 router.get('/', async (req, res) => {
+  console.log(req.body);
+  console.log(req.user);
   if(req.user){
     const userId = req.user.id;
     const user = await User.findOne({

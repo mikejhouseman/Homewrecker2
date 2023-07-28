@@ -43,14 +43,14 @@ app.use(
 
 app.use(routes); // Connect all the routes
 
-// Catch unhandled requests and forward to error handler.
-app.use((_req, _res, next) => {
-  const err = new Error("The requested resource couldn't be found.");
-  err.title = "Resource Not Found";
-  err.errors = ["The requested resource couldn't be found." ];
-  err.status = 404;
-  next(err);
-});
+// // Catch unhandled requests and forward to error handler.
+// app.use((_req, _res, next) => {
+//   const err = new Error("The requested resource couldn't be found.");
+//   err.title = "Resource Not Found";
+//   err.errors = ["The requested resource couldn't be found." ];
+//   err.status = 404;
+//   next(err);
+// });
 
 // Process sequelize errors
 app.use((err, _req, _res, next) => {

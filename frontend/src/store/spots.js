@@ -30,7 +30,7 @@ const sortList = (list) => {
 };
 
 const spotsReducer = (state = {}, action) => {
-  switch (action.type) {
+  switch (action.type && action.spots !== null) {
     case LOAD_SPOTS: {
       const allSpots = {};
       action.spots.forEach(spot => {
