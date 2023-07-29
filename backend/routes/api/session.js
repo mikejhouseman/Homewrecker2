@@ -19,7 +19,7 @@ const validateLogin = [
 ];
 
 // 5 Log in
-router.post('/login', validateLogin, async (req, res, next) => {
+router.post('/', validateLogin, async (req, res, next) => {
     const { credential, password } = req.body;
     const user = await User.unscoped().findOne({
       where: {
