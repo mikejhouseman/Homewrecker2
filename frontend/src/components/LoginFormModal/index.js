@@ -3,30 +3,33 @@ import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-// import { Redirect } from "react-router-dom";
-import "./LoginForm.css";
+import { useHistory } from "react-router-dom";
+import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  // const sessionUser = useSelector((state) => state.session.user);
+  const history = useHistory();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  // if (sessionUser) return <Redirect to="/" />;
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-
     return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+      .then(() => {
+        closeModal();
+        history.push("/"); // Redirect to the home page
+      })
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
       });
-    }
+  };
+
   return (
     <>
       <h1>Log In</h1>
@@ -49,7 +52,7 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (<p>{errors.credential}</p>)}
+        {errors.credential && <p>{errors.credential}</p>}
         <button type="submit">Log In</button>
       </form>
     </>

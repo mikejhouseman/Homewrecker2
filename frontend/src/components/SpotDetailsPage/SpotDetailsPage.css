@@ -1,0 +1,120 @@
+/* frontend/src/components/SpotDetailsPage/SpotDetailsPage.css */
+.spot-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.spot-details {
+  max-width: 500px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.spot-details h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.spot-details p {
+  margin-bottom: 5px;
+}
+
+.spot-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spot-images img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-review {
+  max-width: 500px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.add-review h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.add-review form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-review label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.add-review input {
+  padding: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-review button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-review button:hover {
+  background-color: #0056b3;
+}
+
+.all-reviews {
+  max-width: 500px;
+}
+
+.all-reviews h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.all-reviews ul {
+  list-style: none;
+  padding: 0;
+}
+
+.all-reviews li {
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.all-reviews .review-stars {
+  font-weight: bold;
+}
+
+.all-reviews .review-text {
+  margin-bottom: 5px;
+}
+
+.all-reviews a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.all-reviews a:hover {
+  text-decoration: underline;
+}
