@@ -1,5 +1,4 @@
-// frontend/src/components/LoginFormPage/index.js
-// frontend/src/components/LoginFormModal/LoginFormModal.js
+// frontend/src/components/LoginFormModal/index.js
 
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
@@ -14,17 +13,20 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+    try {
+      const user = await dispatch(sessionActions.login({ credential, password }));
+      if (!user.errors) {
+        closeModal();
+        dispatch(hideAuthButtons());
+      } else {
+        setErrors(user.errors);
+      }
+    } catch (error) {
+      console.error("Error logging in:", error);
+    }
   };
 
   // Disable the "Log In" button if username is less than 4 characters or password is less than 6 characters

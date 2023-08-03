@@ -1,19 +1,13 @@
-// frontend/src/components/AppHeader/index.js
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux'; // Add this import
 import ProfileButton from '../Navigation/ProfileButton';
-import { useModal } from '../../context/Modal';
 import LoginFormModal from '../LoginFormModal';
 import logoImage from '../assets/homewreckerLogo.png';
 import './AppHeader.css';
 
 const AppHeader = () => {
-  const { setModalContent } = useModal();
-
-  const openLoginFormModal = () => {
-    setModalContent(<LoginFormModal />);
-  };
-
+  const authButtonsHidden = useSelector(state => state.ui.authButtonsHidden); // Get the authButtonsHidden state from Redux
 
   return (
     <header className="app-header">
@@ -26,9 +20,12 @@ const AppHeader = () => {
       <div className="user-profile-icon">
         <ProfileButton />
       </div>
-      <div className="login-button">
-        <button onClick={openLoginFormModal}>Log In</button>
-      </div>
+      {!authButtonsHidden && ( // Only render the buttons if authButtonsHidden is false
+        <div className="auth-buttons">
+          <LoginFormModal />
+          {/* Add the Sign Up button here */}
+        </div>
+      )}
     </header>
   );
 };
