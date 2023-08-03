@@ -1,0 +1,36 @@
+/* frontend/src/components/AppHeader.css */
+/* Add this to your CSS file */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.logo-container {
+  flex: 1;
+}
+
+.logo-container img {
+  height: 40px; /* Adjust the height as per your logo size */
+}
+
+.app-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Add media query to adjust header on smaller screens */
+@media (max-width: 768px) {
+  .app-header {
+    flex-wrap: wrap;
+  }
+  .logo-container {
+    order: 1;
+    margin-bottom: 10px;
+  }
+  .app-name {
+    order: 3;
+  }
+}
