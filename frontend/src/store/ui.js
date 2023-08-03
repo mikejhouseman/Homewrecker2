@@ -1,5 +1,5 @@
-// frontend/src/store/login.js
-const HIDE_AUTH_BUTTONS = 'login/HIDE_AUTH_BUTTONS';
+// frontend/src/store/ui.js
+const HIDE_AUTH_BUTTONS = 'ui/HIDE_AUTH_BUTTONS';
 
 export const hideAuthButtons = () => ({
   type: HIDE_AUTH_BUTTONS,
@@ -9,7 +9,7 @@ const initialState = {
   authButtonsHidden: false,
 };
 
-const loginReducer = (state = initialState, action) => {
+const uiReducer = (state = initialState, action) => {
   switch (action.type) {
     case HIDE_AUTH_BUTTONS:
       return {
@@ -21,4 +21,4 @@ const loginReducer = (state = initialState, action) => {
   }
 };
 
-export default loginReducer;
+export default uiReducer;

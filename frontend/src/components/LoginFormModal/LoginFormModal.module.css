@@ -1,0 +1,89 @@
+/* frontend/src/components/LoginFormModal/LoginFormModal.module.css */
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+p {
+  color: red;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #f44336;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #d32f2f;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+button:last-child {
+  margin-top: 10px;
+  background-color: #f44336;
+}
+
+/* Add padding between the buttons */
+button:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+/* Make the last button identical to the other buttons */
+button:last-child {
+  background-color: #f44336;
+}
+
+/* Apply the hover effect to the last button */
+button:last-child:hover {
+  background-color: #d32f2f;
+}
+
+/* Apply the disabled effect to the last button */
+button:last-child:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}

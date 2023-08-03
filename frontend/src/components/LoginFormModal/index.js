@@ -1,10 +1,10 @@
 // frontend/src/components/LoginFormModal/index.js
-
 import React, { useState } from "react";
-import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
 import { useModal } from "../../context/Modal";
-import "./LoginFormModal.css";
+import { hideAuthButtons } from "../../store/ui";
+import styles from "./LoginFormModal.module.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -29,11 +29,16 @@ function LoginFormModal() {
     }
   };
 
-  // Disable the "Log In" button if username is less than 4 characters or password is less than 6 characters
+  const handleDemoLogin = async (e) => {
+    setCredential("demo@user.io");
+    setPassword("password");
+    handleSubmit(e); // Call the handleSubmit function with demo credentials
+  };
+
   const isSubmitDisabled = credential.length < 4 || password.length < 6;
 
   return (
-    <div id="login-form-container">
+    <div className={styles["login-form-container"]}>
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -54,13 +59,14 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit" disabled={isSubmitDisabled}>
+        {errors.credential && <p>{errors.credential}</p>}
+        <button type="submit" disabled={isSubmitDisabled} className={styles.button}>
           Log In
         </button>
       </form>
+      <button onClick={handleDemoLogin} className={styles.button}>
+        Log In as Demo User
+      </button>
     </div>
   );
 }
