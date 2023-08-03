@@ -12,7 +12,9 @@ const AppHeader = () => {
         </Link>
       </div>
       <div className="app-name">Homewrecker</div>
-      {/* Add other navigation links/buttons here */}
+      <div className="user-profile-icon">
+        <ProfileButton />
+      </div>
     </header>
   );
 };
