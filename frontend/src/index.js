@@ -1,5 +1,6 @@
 // frontend/src/index.js
 import React from 'react';
+
 import './index.css';
 // import ReactDom from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';

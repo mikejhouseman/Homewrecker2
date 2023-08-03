@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-import { FontAwesomeIcon } from "@fontawesome/react-fontawesome";
-import { faUser } from "@fontawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 
-const ProfileButton = ({user}) => {
+const ProfileButton = ({ user }) => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -24,7 +24,7 @@ const ProfileButton = ({user}) => {
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
@@ -36,17 +36,16 @@ const ProfileButton = ({user}) => {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-
-
   return (
     <>
       <button onClick={openMenu}>
-        <FontAwesomeIcon icon={faUser} />
-        <i className="fa-solid fa-skull-crossbones"></i>
+        <FontAwesomeIcon icon={faSkullCrossbones} />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
+        <li>
+          {user.firstName} {user.lastName}
+        </li>
         <li>{user.email}</li>
         <li>
           <button onClick={logout}>Log Out</button>
@@ -54,6 +53,6 @@ const ProfileButton = ({user}) => {
       </ul>
     </>
   );
-}
+};
 
 export default ProfileButton;
