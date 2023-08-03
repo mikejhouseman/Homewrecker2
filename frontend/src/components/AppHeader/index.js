@@ -1,12 +1,20 @@
-// frontend/src/components/Appheader/index.js
+// frontend/src/components/AppHeader/index.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ProfileButton from '../Navigation/ProfileButton';
+import { useModal } from '../../context/Modal';
 import LoginFormModal from '../LoginFormModal';
 import logoImage from '../assets/homewreckerLogo.png';
 import './AppHeader.css';
 
 const AppHeader = () => {
+  const { setModalContent } = useModal();
+
+  const openLoginFormModal = () => {
+    setModalContent(<LoginFormModal />);
+  };
+
+
   return (
     <header className="app-header">
       <div className="logo-container">
@@ -19,7 +27,7 @@ const AppHeader = () => {
         <ProfileButton />
       </div>
       <div className="login-button">
-        <LoginFormModal />
+        <button onClick={openLoginFormModal}>Log In</button>
       </div>
     </header>
   );

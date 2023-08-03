@@ -1,4 +1,6 @@
 // frontend/src/components/LoginFormPage/index.js
+// frontend/src/components/LoginFormModal/LoginFormModal.js
+
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
@@ -7,10 +9,10 @@ import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
+  const { closeModal } = useModal();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,15 +27,11 @@ function LoginFormModal() {
       });
   };
 
-  // Function to handle logging in as a demo user
-  const handleLoginAsDemoUser = (e) => {
-    e.preventDefault();
-    setCredential("demo");
-    setPassword("password");
-  };
+  // Disable the "Log In" button if username is less than 4 characters or password is less than 6 characters
+  const isSubmitDisabled = credential.length < 4 || password.length < 6;
 
   return (
-    <>
+    <div id="login-form-container">
       <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -54,17 +52,15 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && <p>{errors.credential}</p>}
-        <button type="submit" disabled={credential.length < 4 || password.length < 6}>
+        {errors.credential && (
+          <p>{errors.credential}</p>
+        )}
+        <button type="submit" disabled={isSubmitDisabled}>
           Log In
         </button>
-        <button type="button" onClick={handleLoginAsDemoUser}>
-          Log In as Demo User
-        </button>
       </form>
-    </>
+    </div>
   );
 }
 
 export default LoginFormModal;
-
