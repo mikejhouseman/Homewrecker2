@@ -1,4 +1,5 @@
 // frontend/src/components/Navigation/ProfileButton.js
+// frontend/src/components/Navigation/ProfileButton.js
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -14,27 +15,32 @@ const ProfileButton = ({ user }) => {
   const history = useHistory();
 
   const openMenu = () => {
-    if (showMenu) return;
     setShowMenu(true);
   };
 
+  const closeMenu = () => {
+    setShowMenu(false);
+  };
+
   useEffect(() => {
-    if (!showMenu) return;
+    if (showMenu) {
+      const handleOutsideClick = (e) => {
+        if (!ulRef.current || !ulRef.current.contains(e.target)) {
+          closeMenu();
+        }
+      };
+      document.addEventListener("click", handleOutsideClick);
 
-    const closeMenu = (e) => {
-      if (!ulRef.current || !ulRef.current.contains(e.target)) {
-        setShowMenu(false);
-      }
-    };
-
-    document.addEventListener("click", closeMenu);
-
-    return () => document.removeEventListener("click", closeMenu);
+      return () => {
+        document.removeEventListener("click", handleOutsideClick);
+      };
+    }
   }, [showMenu]);
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    closeMenu(); 
     history.push('/');
   };
 
@@ -48,7 +54,6 @@ const ProfileButton = ({ user }) => {
       {user && (
         <ul className={ulClassName} ref={ulRef}>
           <li>Hello, {user.firstName}</li>
-          <li>{user.username}</li>
           <li>{user.email}</li>
           <li>
             <button onClick={logout}>Log Out</button>

@@ -24,6 +24,16 @@ function SignupFormModal() {
 
   // if (sessionUser) return <Redirect to="/" />;
 
+  const handleResetForm = () => {
+    setEmail("");
+    setUsername("");
+    setFirstName("");
+    setLastName("");
+    setPassword("");
+    setConfirmPassword("");
+    setErrors({});
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
@@ -37,7 +47,10 @@ function SignupFormModal() {
           password,
         })
       )
-      .then(closeModal)
+      .then(() => {
+        closeModal();
+        handleResetForm(); // Reset the form after successful signup
+      })
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -46,9 +59,11 @@ function SignupFormModal() {
       });
     }
     return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
+      confirmPassword: "Please make both passwords match."
     });
   };
+
+
 
   return (
     <>
