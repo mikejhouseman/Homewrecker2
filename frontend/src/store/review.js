@@ -1,4 +1,5 @@
-// // frontend/src/store/reviews.js
+// // frontend/src/store/review.js
+// frontend/src/store/review.js
 const LOAD_REVIEWS = 'reviews/LOAD_REVIEWS';
 const ADD_REVIEW = 'reviews/ADD_REVIEW';
 const DELETE_REVIEW = 'reviews/DELETE_REVIEW';
@@ -69,11 +70,11 @@ const initialState = {
   list: [],
 };
 
-const reviewsReducer = (state = initialState, action) => {
+const reviewReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_REVIEWS: {
       const allReviews = {};
-      action.reviews.forEach(review => {
+      action.reviews.forEach((review) => {
         allReviews[review.id] = review;
       });
       return {
@@ -87,13 +88,13 @@ const reviewsReducer = (state = initialState, action) => {
         ...state,
         [action.review.id]: action.review,
       };
-      newState.list = newState.list.map(reviewId => newState[reviewId]);
+      newState.list = newState.list.map((reviewId) => newState[reviewId]);
       return newState;
     }
     case DELETE_REVIEW: {
       const newState = { ...state };
       delete newState[action.review.id];
-      newState.list = newState.list.filter(reviewId => reviewId !== action.review.id);
+      newState.list = newState.list.filter((reviewId) => reviewId !== action.review.id);
       return newState;
     }
     default:
@@ -101,4 +102,4 @@ const reviewsReducer = (state = initialState, action) => {
   }
 };
 
-export default reviewsReducer;
+export default reviewReducer;

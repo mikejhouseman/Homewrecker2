@@ -1,18 +1,33 @@
 // frontend/src/components/Navigation/ProfileButton.js
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fontawesome/react-fontawesome";
+import { faUser } from "@fontawesome/free-solid-svg-icons";
 
 const ProfileButton = ({user}) => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
+  const ulRef = useRef();
 
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
   };
+
+  useEffect(() => {
+    if (!showMenu) return;
+
+    const closeMenu = (e) => {
+      if (!ulRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener('click', closeMenu);
+
+    return () => document.removeEventListener("click", closeMenu);
+  }, [showMenu]);
 
   const logout = (e) => {
     e.preventDefault();
@@ -21,25 +36,15 @@ const ProfileButton = ({user}) => {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-  useEffect(() => {
-    if (!showMenu) return;
 
-    const closeMenu = (e) => {
-      setShowMenu(false);
-    };
-
-    document.addEventListener('click', closeMenu);
-
-    return () => document.removeEventListener("click", closeMenu);
-  }, [showMenu]);
 
   return (
     <>
-      <button onClick={() => setShowMenu(!showMenu)}>
+      <button onClick={openMenu}>
         <FontAwesomeIcon icon={faUser} />
         <i className="fa-solid fa-skull-crossbones"></i>
       </button>
-      <ul className={ulClassName}>
+      <ul className={ulClassName} ref={ulRef}>
         <li>{user.username}</li>
         <li>{user.firstName} {user.lastName}</li>
         <li>{user.email}</li>

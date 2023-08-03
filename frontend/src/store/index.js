@@ -2,7 +2,7 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware, co
 import thunk from "redux-thunk";
 import spotsReducer from "./spot";
 import sessionReducer from "./session";
-import reviewsReducer from "./reviews";
+import reviewsReducer from "./review";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
