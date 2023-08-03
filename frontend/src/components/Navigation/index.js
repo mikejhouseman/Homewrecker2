@@ -6,6 +6,7 @@ import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import AppHeader from '../AppHeader';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
@@ -36,6 +37,7 @@ function Navigation({ isLoaded }){
 
   return (
     <ul>
+      <AppHeader />
       <li>
         <NavLink exact to="/">Home</NavLink>
       </li>

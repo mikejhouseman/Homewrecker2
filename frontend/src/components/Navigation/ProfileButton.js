@@ -19,7 +19,7 @@ const ProfileButton = ({ user }) => {
     if (!showMenu) return;
 
     const closeMenu = (e) => {
-      if (!ulRef.current.contains(e.target)) {
+      if (!ulRef.current || !ulRef.current.contains(e.target)) {
         setShowMenu(false);
       }
     };
@@ -41,16 +41,18 @@ const ProfileButton = ({ user }) => {
       <button onClick={openMenu}>
         <FontAwesomeIcon icon={faSkullCrossbones} />
       </button>
-      <ul className={ulClassName} ref={ulRef}>
-        <li>{user.username}</li>
-        <li>
-          {user.firstName} {user.lastName}
-        </li>
-        <li>{user.email}</li>
-        <li>
-          <button onClick={logout}>Log Out</button>
-        </li>
-      </ul>
+      {user && (
+        <ul className={ulClassName} ref={ulRef}>
+          <li>{user.username}</li>
+          <li>
+            {user.firstName} {user.lastName}
+          </li>
+          <li>{user.email}</li>
+          <li>
+            <button onClick={logout}>Log Out</button>
+          </li>
+        </ul>
+      )}
     </>
   );
 };

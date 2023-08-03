@@ -115,4 +115,4 @@ function SignupFormModal() {
   );
 }
 
-export default SignupFormPage;
+export default SignupFormModal;

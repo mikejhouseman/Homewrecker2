@@ -7,13 +7,10 @@ import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  // const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,6 +23,13 @@ function LoginFormModal() {
           setErrors(data.errors);
         }
       });
+  };
+
+  // Function to handle logging in as a demo user
+  const handleLoginAsDemoUser = (e) => {
+    e.preventDefault();
+    setCredential("demo");
+    setPassword("password");
   };
 
   return (
@@ -50,13 +54,17 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        {errors.credential && <p>{errors.credential}</p>}
+        <button type="submit" disabled={credential.length < 4 || password.length < 6}>
+          Log In
+        </button>
+        <button type="button" onClick={handleLoginAsDemoUser}>
+          Log In as Demo User
+        </button>
       </form>
     </>
   );
 }
 
 export default LoginFormModal;
+
