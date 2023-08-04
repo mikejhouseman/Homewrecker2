@@ -1,19 +1,22 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSpots } from '../store/spot';
+import * as spotActions from '../../store/spot';
 
 const LandingPage = () => {
   const dispatch = useDispatch();
-  const spots = useSelector((state) => state.spots.spots);
+  const spots = useSelector((state) => state.spot.list);
+
+// ADD ABILITY TO SHOW ADDSPOTMODALFORM HERE IF THE USER IS LOGGED IN.
+
 
   useEffect(() => {
     // Load spots when the component mounts
-    dispatch(getSpots());
+    dispatch(spotActions.getSpots());
   }, [dispatch]);
 
   return (
     <div>
-      <h1>Welcome to our Spot Listing Page!</h1>
+      <h1>Check out your wreckable spots!</h1>
       <div>
         {spots && spots.length > 0 ? (
           <div>

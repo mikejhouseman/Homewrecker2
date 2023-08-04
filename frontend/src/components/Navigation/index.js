@@ -1,40 +1,13 @@
 // frontend/src/components/Navigation/index.js
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
-import OpenModalButton from '../OpenModalButton';
-import LoginFormModal from '../LoginFormModal';
-import SignupFormModal from '../SignupFormModal';
 import logoImage from '../Assets/homewreckerLogo.png';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
-  const sessionUser = useSelector(state => state.session.user);
-
-
-  let sessionLinks;
-  if (sessionUser) {
-    sessionLinks = (
-      <li>
-        <ProfileButton user={sessionUser} />
-        {/* show manage spots, add spots */}
-      </li>
-    );
-  } else {
-    sessionLinks = (
-      <li>
-          <OpenModalButton
-          buttonText="Log In"
-          modalComponent={<LoginFormModal />}
-        />
-        <OpenModalButton
-          buttonText="Sign Up"
-          modalComponent={<SignupFormModal />}
-        />
-      </li>
-    );
-  }
+  const currentUser = useSelector(state => state.session.user);
 
   return (
     <ul>
@@ -44,9 +17,15 @@ function Navigation({ isLoaded }){
         </Link>
       </div>
       <li>
-        <ProfileButton user={sessionUser} />
+        {currentUser && (
+          <Link to='/spots/new'>Create New Spot</Link>
+        )}
       </li>
-      {isLoaded && sessionLinks}
+      {isLoaded && (
+        <li>
+        <ProfileButton user={currentUser} />
+        </li>
+      )}
     </ul>
   );
 }

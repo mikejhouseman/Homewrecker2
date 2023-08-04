@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as sessionActions from "../../store/session";
 import { useModal } from "../../context/Modal";
-import { hideAuthButtons } from "../../store/ui";
 import styles from "./LoginFormModal.module.css";
 
 function LoginFormModal() {
@@ -23,7 +22,6 @@ function LoginFormModal() {
       const user = await dispatch(sessionActions.login({ credential, password }));
       if (!user.errors) {
         closeModal();
-        dispatch(hideAuthButtons());
       } else {
         setErrors(user.errors);
       }

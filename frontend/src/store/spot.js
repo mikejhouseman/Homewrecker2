@@ -14,57 +14,57 @@ const ADD_BOOKING = 'spot/ADD_BOOKING';
 const DELETE_IMAGE = 'spot/DELETE_IMAGE';
 
 // action creators
-const loadSpots = (spots) => ({
+export const loadSpots = (spots) => ({
   type: LOAD_SPOTS,
   spots
 });
 
-const spotDetails = (spot) => ({
+export const spotDetails = (spot) => ({
   type: SPOT_DETAILS,
   spot
 });
 
-const addSpot = (spot) => ({
+export const addSpot = (spot) => ({
   type: ADD_SPOT,
   spot
 });
 
-const editSpot = (spot) => ({
+export const editSpot = (spot) => ({
   type: EDIT_SPOT,
   spot
 });
 
-const deleteSpot = (spot) => ({
+export const deleteSpot = (spot) => ({
   type: DELETE_SPOT,
   spot
 });
 
-const addReview = (review) => ({
+export const addReview = (review) => ({
   type: ADD_REVIEW,
   review
 });
 
-const addImage = (image) => ({
+export const addImage = (image) => ({
   type: ADD_IMAGE,
   image
 });
 
-const getReviews = (reviews) => ({
+export const getReviews = (reviews) => ({
   type: GET_REVIEWS,
   reviews
 });
 
-const getBookings = (bookings) => ({
+export const getBookings = (bookings) => ({
   type: GET_BOOKINGS,
   bookings
 });
 
-const addBooking = (booking) => ({
+export const addBooking = (booking) => ({
   type: ADD_BOOKING,
   booking
 });
 
-const deleteImage = (imageId) => ({
+export const deleteImage = (imageId) => ({
   type: DELETE_IMAGE,
   imageId
 });
@@ -247,58 +247,85 @@ export const deleteSpotImage = (imageId) => async (dispatch) => {
   }
 };
 
-const initialState = { spots: null, current: null };
+const initialState = { list: [], current: null };
 
 const spotsReducer = (state = initialState, action) => {
-  let newState;
   switch (action.type) {
     case LOAD_SPOTS:
-      newState = Object.assign({}, state);
-      newState.spots = action.spots;
-      return newState;
+      return {
+        ...state,
+        list: action.spots,
+      };
     case SPOT_DETAILS:
-      newState = Object.assign({}, state);
-      newState.current = action.spot;
-      return newState;
+      return {
+        ...state,
+        current: action.spot,
+      };
     case ADD_SPOT:
-      newState = Object.assign({}, state);
-      newState.spots.push(action.spot);
-      return newState;
+      return {
+        ...state,
+        list: [...state.list, action.spot],
+      };
     case EDIT_SPOT:
-      newState = Object.assign({}, state);
-      const indexToEdit = newState.spots.findIndex(spot => spot.id === action.spot.id);
-      if (indexToEdit !== -1) {
-        newState.spots[indexToEdit] = action.spot;
-      }
-      return newState;
+      return {
+        ...state,
+        list: state.list.map((spot) =>
+          spot.id === action.spot.id ? action.spot : spot
+        ),
+      };
     case DELETE_SPOT:
-      newState = Object.assign({}, state);
-      newState.spots = newState.spots.filter(spot => spot.id !== action.spot.id);
-      return newState;
+      return {
+        ...state,
+        list: state.list.filter((spot) => spot.id !== action.spot.id),
+      };
     case ADD_REVIEW:
-      newState = Object.assign({}, state);
-      newState.current.reviews.push(action.review);
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          reviews: [...state.current.reviews, action.review],
+        },
+      };
     case ADD_IMAGE:
-      newState = Object.assign({}, state);
-      newState.current.images.push(action.image);
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          images: [...state.current.images, action.image],
+        },
+      };
     case GET_REVIEWS:
-      newState = Object.assign({}, state);
-      newState.current.reviews = action.reviews;
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          reviews: action.reviews,
+        },
+      };
     case GET_BOOKINGS:
-      newState = Object.assign({}, state);
-      newState.current.bookings = action.bookings;
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          bookings: action.bookings,
+        },
+      };
     case ADD_BOOKING:
-      newState = Object.assign({}, state);
-      newState.current.bookings.push(action.booking);
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          bookings: [...state.current.bookings, action.booking],
+        },
+      };
     case DELETE_IMAGE:
-      newState = Object.assign({}, state);
-      newState.current.images = newState.current.images.filter(image => image.id !== action.imageId);
-      return newState;
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          images: state.current.images.filter((image) => image.id !== action.imageId),
+        },
+      };
     default:
       return state;
   }

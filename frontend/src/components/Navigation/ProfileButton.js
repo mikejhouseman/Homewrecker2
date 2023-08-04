@@ -1,18 +1,21 @@
 // frontend/src/components/Navigation/ProfileButton.js
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import "./ProfileButton.css";
+import SignupFormModal from "../SignupFormModal";
+import LoginFormModal from "../LoginFormModal";
+import OpenModalButton from "../OpenModalButton";
 
-// ADD LOG IN AND SIGN UP MODAL HERE
 const ProfileButton = ({ user }) => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
   const history = useHistory();
+  const sessionUser = useSelector((state) => state.session.user);
 
   const openMenu = () => {
     setShowMenu(true);
@@ -51,12 +54,31 @@ const ProfileButton = ({ user }) => {
       <button className="profile-button" onClick={openMenu}>
         <FontAwesomeIcon icon={faSkullCrossbones} />
       </button>
-      {user && (
+
+      {!sessionUser && (
+        <ul className={ulClassName} ref={ulRef}>
+          <li>
+            <OpenModalButton
+            buttonText="Log In"
+            modalComponent={<LoginFormModal />}
+            />
+          </li>
+            <OpenModalButton
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal />}
+            />
+        </ul>
+      )}
+
+      {sessionUser && (
         <ul className={ulClassName} ref={ulRef}>
           <li>Hello, {user.firstName}</li>
           <li>{user.email}</li>
           <li>
             <button onClick={logout}>Log Out</button>
+          </li>
+          <li>
+            <a href="/user/spots">ManageSpots</a>
           </li>
         </ul>
       )}
