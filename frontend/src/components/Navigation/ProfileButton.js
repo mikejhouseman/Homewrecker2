@@ -12,14 +12,24 @@ import OpenModalButton from "../OpenModalButton";
 
 const ProfileButton = () => {
   const dispatch = useDispatch();
-  const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
   const containerRef = useRef();
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignupModal, setShowSignupModal] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
+  };
+
+  const toggleLoginModal = () => {
+    setShowLoginModal((prevShowLoginModal) => !prevShowLoginModal);
+  };
+
+  const toggleSignupModal = () => {
+    setShowSignupModal((prevShowSignupModal) => !prevShowSignupModal);
   };
 
   const closeMenu = () => {
@@ -68,6 +78,9 @@ const ProfileButton = () => {
           {!sessionUser ? (
             <>
               <li>
+              {/* <button className="login-button" onClick={toggleLoginModal}>
+                  Log In <LoginFormModal/>
+                </button> */}
                 <OpenModalButton
                   buttonText="Log In"
                   modalComponent={<LoginFormModal />}
@@ -97,5 +110,6 @@ const ProfileButton = () => {
     </div>
   );
 };
+
 
 export default ProfileButton;
