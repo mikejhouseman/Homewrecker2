@@ -1,5 +1,4 @@
 // frontend/src/components/AppHeader/index.js
-// frontend/src/components/AppHeader/index.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -43,4 +42,3 @@ const AppHeader = () => {
 };
 
 export default AppHeader;
-

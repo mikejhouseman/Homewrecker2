@@ -1,5 +1,4 @@
 // frontend/src/components/Navigation/ProfileButton.js
-// frontend/src/components/Navigation/ProfileButton.js
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -8,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
 import "./ProfileButton.css";
 
+// ADD LOG IN AND SIGN UP MODAL HERE
 const ProfileButton = ({ user }) => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
@@ -40,7 +40,7 @@ const ProfileButton = ({ user }) => {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-    closeMenu(); 
+    closeMenu();
     history.push('/');
   };
 

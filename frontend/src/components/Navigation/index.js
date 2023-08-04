@@ -6,7 +6,7 @@ import ProfileButton from './ProfileButton';
 import OpenModalButton from '../OpenModalButton';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
-import AppHeader from '../AppHeader';
+import logoImage from '../Assets/homewreckerLogo.png';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
@@ -18,6 +18,7 @@ function Navigation({ isLoaded }){
     sessionLinks = (
       <li>
         <ProfileButton user={sessionUser} />
+        {/* show manage spots, add spots */}
       </li>
     );
   } else {
@@ -37,9 +38,13 @@ function Navigation({ isLoaded }){
 
   return (
     <ul>
-      <AppHeader />
+      <div className='logo-container'>
+        <Link to='/'>
+          <img src={logoImage} alt='Homewrecker Logo' />
+        </Link>
+      </div>
       <li>
-        <NavLink exact to="/">Home</NavLink>
+        <ProfileButton user={sessionUser} />
       </li>
       {isLoaded && sessionLinks}
     </ul>
