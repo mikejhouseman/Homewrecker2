@@ -17,20 +17,20 @@ const ProfileButton = () => {
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const [showMenu, setShowMenu] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false);
+  // const [showLoginModal, setShowLoginModal] = useState(false);
+  // const [showSignupModal, setShowSignupModal] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   };
 
-  const toggleLoginModal = () => {
-    setShowLoginModal((prevShowLoginModal) => !prevShowLoginModal);
-  };
+  // const toggleLoginModal = () => {
+  //   setShowLoginModal((prevShowLoginModal) => !prevShowLoginModal);
+  // };
 
-  const toggleSignupModal = () => {
-    setShowSignupModal((prevShowSignupModal) => !prevShowSignupModal);
-  };
+  // const toggleSignupModal = () => {
+  //   setShowSignupModal((prevShowSignupModal) => !prevShowSignupModal);
+  // };
 
   const closeMenu = () => {
     setShowMenu(false);
