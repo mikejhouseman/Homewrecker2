@@ -1,33 +1,33 @@
 // frontend/src/components/LoginFormModal/index.js
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
+// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import styles from "./LoginFormModal.module.css";
+import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  const { closeModal, modalRef } = useModal();
+  // const { closeModal, modalRef } = useModal();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { closeModal } = useModal();
 
-  const sessionUser = useSelector((state) => state.session.user);
+  // const sessionUser = useSelector((state) => state.session.user);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
-    try {
-      const user = await dispatch(sessionActions.login({ credential, password }));
-      if (!user.errors) {
-        closeModal();
-      } else {
-        setErrors(user.errors);
-      }
-    } catch (error) {
-      console.error("Error logging in:", error);
-    }
+    return dispatch(sessionActions.login({ credential, password }))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
   };
 
   const handleDemoLogin = async (e) => {
@@ -36,69 +36,83 @@ function LoginFormModal() {
     handleSubmit(e);
   };
 
-  const isSubmitDisabled = credential.length < 4 || password.length < 6;
+  // const isSubmitDisabled = credential.length < 4 || password.length < 6;
 
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
-  useEffect(() => {
-    const handleOutsideClick = (e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setCredential("");
-        setPassword("");
-        closeModal();
-      }
-    };
-    if (isModalOpen) {
-      document.addEventListener("click", handleOutsideClick);
-    }
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, [isModalOpen, closeModal, modalRef]);
+//   return (
+//     <div>
+//       {!sessionUser && (
+//         <button className={styles.button} onClick={toggleModal}>
+//           Log In
+//         </button>
+//       )}
+//       {isModalOpen && !sessionUser && (
+//         <div className={styles["login-form-container"]} ref={modalRef}>
+//           <h1>Log In</h1>
+//           <form onSubmit={handleSubmit}>
+//             <label>
+//               Username or Email
+//               <input
+//                 type="text"
+//                 value={credential}
+//                 onChange={(e) => setCredential(e.target.value)}
+//                 required
+//               />
+//             </label>
+//             <label>
+//               Password
+//               <input
+//                 type="password"
+//                 value={password}
+//                 onChange={(e) => setPassword(e.target.value)}
+//                 required
+//               />
+//             </label>
+//             {errors.credential && <p>{errors.credential}</p>}
+//             <button type="submit" disabled={isSubmitDisabled} className={styles.button}>
+//               Log In
+//             </button>
+//           </form>
+//           <button onClick={handleDemoLogin} className={styles.button}>
+//             Log In as Demo User
+//           </button>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 
-  return (
-    <div>
-      {!sessionUser && (
-        <button className={styles.button} onClick={toggleModal}>
-          Log In
-        </button>
+return (
+  <>
+    <h1>Log In</h1>
+    <form onSubmit={handleSubmit}>
+      <label>
+        Username or Email
+        <input
+          type="text"
+          value={credential}
+          onChange={(e) => setCredential(e.target.value)}
+          required
+        />
+      </label>
+      <label>
+        Password
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </label>
+      {errors.credential && (
+        <p>{errors.credential}</p>
       )}
-      {isModalOpen && !sessionUser && (
-        <div className={styles["login-form-container"]} ref={modalRef}>
-          <h1>Log In</h1>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Username or Email
-              <input
-                type="text"
-                value={credential}
-                onChange={(e) => setCredential(e.target.value)}
-                required
-              />
-            </label>
-            <label>
-              Password
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </label>
-            {errors.credential && <p>{errors.credential}</p>}
-            <button type="submit" disabled={isSubmitDisabled} className={styles.button}>
-              Log In
-            </button>
-          </form>
-          <button onClick={handleDemoLogin} className={styles.button}>
-            Log In as Demo User
-          </button>
-        </div>
-      )}
-    </div>
-  );
+      <button type="submit">Log In</button>
+    </form>
+    <button onClick={handleDemoLogin} className="button">
+    Log In as Demo User
+    </button>
+  </>
+);
 }
-
 export default LoginFormModal;

@@ -6,9 +6,10 @@ import * as sessionActions from "../../store/session";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSkullCrossbones, faBars } from "@fortawesome/free-solid-svg-icons";
 import "./ProfileButton.css";
+import OpenModalButton from "../OpenModalButton";
 import SignupFormModal from "../SignupFormModal";
 import LoginFormModal from "../LoginFormModal";
-import OpenModalButton from "../OpenModalButton";
+
 
 const ProfileButton = () => {
   const dispatch = useDispatch();
@@ -17,20 +18,21 @@ const ProfileButton = () => {
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const [showMenu, setShowMenu] = useState(false);
-  // const [showLoginModal, setShowLoginModal] = useState(false);
-  // const [showSignupModal, setShowSignupModal] = useState(false);
+
+  // useEffect for when user is loggedin or not
+  useEffect(() => {
+    const handleUserChange = () => {
+      setShowMenu(false); // Close the menu when the login status changes
+    };
+    window.addEventListener("storage", handleUserChange);
+    return () => {
+      window.removeEventListener("storage", handleUserChange);
+    };
+  }, []);
 
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   };
-
-  // const toggleLoginModal = () => {
-  //   setShowLoginModal((prevShowLoginModal) => !prevShowLoginModal);
-  // };
-
-  // const toggleSignupModal = () => {
-  //   setShowSignupModal((prevShowSignupModal) => !prevShowSignupModal);
-  // };
 
   const closeMenu = () => {
     setShowMenu(false);
@@ -41,7 +43,6 @@ const ProfileButton = () => {
       if (!containerRef.current || !ulRef.current) {
         return;
       }
-
       if (
         !containerRef.current.contains(e.target) &&
         !ulRef.current.contains(e.target)
@@ -49,9 +50,7 @@ const ProfileButton = () => {
         closeMenu();
       }
     };
-
     document.addEventListener("click", handleOutsideClick);
-
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -76,6 +75,7 @@ const ProfileButton = () => {
       {showMenu && (
         <ul className={ulClassName} ref={ulRef}>
           {!sessionUser ? (
+        // IF NOT LOGGED IN
             <>
               <li>
               {/* <button className="login-button" onClick={toggleLoginModal}>
@@ -94,6 +94,7 @@ const ProfileButton = () => {
               </li>
             </>
           ) : (
+        // IF LOGGED IN
             <>
               <li>Hello, {sessionUser.firstName}</li>
               <li>{sessionUser.email}</li>
