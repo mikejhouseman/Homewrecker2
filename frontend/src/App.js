@@ -1,11 +1,12 @@
 // frontend/src/App.js
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, Switch } from "react-router-dom";
+// import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
-import LandingPage from "./components/LandingPage";
-import SpotDetails from "./components/SpotDetails";
+// import LandingPage from "./components/LandingPage";
+// import SpotDetails from "./components/SpotDetails";
 // import ManageSpots from "./components/ManageSpots";
 
 function App() {
@@ -20,13 +21,13 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Switch>
         {/* Landing Page */}
-        <Route exact path="/">
+        {/* <Route exact path="/">
         <LandingPage />
-        </Route>
+        </Route> */}
         {/* Route exact path = "/spots/${spotId}' SpotDetails */}
-        <Route exact path="/spots/:spotId">
+        {/* <Route exact path="/spots/:spotId">
           <SpotDetails />
-        </Route>
+        </Route> */}
        {/* Route exact path = "/users/${userId}/spots" ManageSpots */}
         {/* <Route exact path="/:userId/spots">
           <ManageSpots />

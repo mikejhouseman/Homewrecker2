@@ -7,7 +7,7 @@ import logoImage from '../Assets/homewreckerLogo.png';
 import './Navigation.css';
 
 function Navigation({ isLoaded }){
-  const currentUser = useSelector(state => state.session.user);
+  const sessionUser = useSelector(state => state.session.user);
 
   return (
     <ul>
@@ -16,14 +16,14 @@ function Navigation({ isLoaded }){
           <img src={logoImage} alt='Homewrecker Logo' />
         </Link>
       </div>
-      <li>
-        {currentUser && (
-          <Link to='/spots/new'>Create New Spot</Link>
+      <div>
+        {sessionUser && (
+            <ProfileButton user={sessionUser} />
         )}
-      </li>
+      </div>
       {isLoaded && (
         <li>
-        <ProfileButton user={currentUser} />
+        <ProfileButton user={sessionUser} />
         </li>
       )}
     </ul>

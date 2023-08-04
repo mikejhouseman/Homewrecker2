@@ -4,21 +4,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSkullCrossbones } from "@fortawesome/free-solid-svg-icons";
+import { faSkullCrossbones, faBars } from "@fortawesome/free-solid-svg-icons";
 import "./ProfileButton.css";
 import SignupFormModal from "../SignupFormModal";
 import LoginFormModal from "../LoginFormModal";
 import OpenModalButton from "../OpenModalButton";
 
-const ProfileButton = ({ user }) => {
+const ProfileButton = () => {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
+  const containerRef = useRef();
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
 
-  const openMenu = () => {
-    setShowMenu(true);
+  const toggleMenu = () => {
+    setShowMenu((prevShowMenu) => !prevShowMenu);
   };
 
   const closeMenu = () => {
@@ -26,60 +27,71 @@ const ProfileButton = ({ user }) => {
   };
 
   useEffect(() => {
-    if (showMenu) {
-      const handleOutsideClick = (e) => {
-        if (!ulRef.current || !ulRef.current.contains(e.target)) {
-          closeMenu();
-        }
-      };
-      document.addEventListener("click", handleOutsideClick);
+    const handleOutsideClick = (e) => {
+      if (!containerRef.current || !ulRef.current) {
+        return;
+      }
 
-      return () => {
-        document.removeEventListener("click", handleOutsideClick);
-      };
-    }
-  }, [showMenu]);
+      if (
+        !containerRef.current.contains(e.target) &&
+        !ulRef.current.contains(e.target)
+      ) {
+        closeMenu();
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
 
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
-    history.push('/');
+    history.push("/");
   };
 
-  const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+  const ulClassName = "profile-dropdown" + (showMenu ? " show" : ""); // Add "show" class to display the dropdown
 
   return (
-    <div className="profile-button-container">
-      <button className="profile-button" onClick={openMenu}>
+    <div className="profile-button-container" ref={containerRef}>
+      <button className="profile-button" onClick={toggleMenu}>
+        <FontAwesomeIcon icon={faBars} />
         <FontAwesomeIcon icon={faSkullCrossbones} />
       </button>
 
-      {!sessionUser && (
+      {showMenu && (
         <ul className={ulClassName} ref={ulRef}>
-          <li>
-            <OpenModalButton
-            buttonText="Log In"
-            modalComponent={<LoginFormModal />}
-            />
-          </li>
-            <OpenModalButton
-            buttonText="Sign Up"
-            modalComponent={<SignupFormModal />}
-            />
-        </ul>
-      )}
-
-      {sessionUser && (
-        <ul className={ulClassName} ref={ulRef}>
-          <li>Hello, {user.firstName}</li>
-          <li>{user.email}</li>
-          <li>
-            <button onClick={logout}>Log Out</button>
-          </li>
-          <li>
-            <a href="/user/spots">ManageSpots</a>
-          </li>
+          {!sessionUser ? (
+            <>
+              <li>
+                <OpenModalButton
+                  buttonText="Log In"
+                  modalComponent={<LoginFormModal />}
+                />
+              </li>
+              <li>
+                <OpenModalButton
+                  buttonText="Sign Up"
+                  modalComponent={<SignupFormModal />}
+                />
+              </li>
+            </>
+          ) : (
+            <>
+              <li>Hello, {sessionUser.firstName}</li>
+              <li>{sessionUser.email}</li>
+              <li>
+                <button onClick={logout}>Log Out</button>
+              </li>
+              <li>
+                <button className="manage-button">Manage Spots</button>
+              </li>
+            </>
+          )}
         </ul>
       )}
     </div>

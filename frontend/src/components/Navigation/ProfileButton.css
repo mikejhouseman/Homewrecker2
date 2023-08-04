@@ -1,10 +1,16 @@
 /* frontend/src/components/Navigation/ProfileButton.css */
+
+/* Updated styles for the ProfileButton component */
 .profile-button-container {
-  position: relative;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px; /* Make the container square-shaped */
+  height: 40px; /* Make the container square-shaped */
 }
 
 .profile-button {
-  background-color: #f44336;
+  background-color: #000000;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -12,6 +18,11 @@
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-button:hover {
@@ -26,7 +37,7 @@
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px;
+  padding: 16px; /* Increased padding to make the dropdown slightly larger */
   z-index: 1;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -54,4 +65,31 @@
 
 .profile-dropdown button:hover {
   background-color: #d32f2f;
+}
+
+/* Styles for the Log Out and Manage Spot buttons */
+.logout-button,
+.manage-button {
+  background-color: #f44336;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 8px;
+}
+
+.logout-button:hover,
+.manage-button:hover {
+  background-color: #d32f2f;
+}
+
+/* Additional styles for the logoImage */
+.logoImage {
+  max-width: 50%; /* Reduce the size of the logoImage to half its original size */
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
