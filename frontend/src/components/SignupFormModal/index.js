@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
-import styles from "./SignupFormModal.module.css";
+import './SignupFormModal.css'
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -16,23 +16,6 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
-  // if (sessionUser) return <Redirect to="/" />;
-
-  const handleResetForm = () => {
-    setEmail("");
-    setUsername("");
-    setFirstName("");
-    setLastName("");
-    setPassword("");
-    setConfirmPassword("");
-    setErrors({});
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,19 +30,16 @@ function SignupFormModal() {
           password,
         })
       )
-      .then(() => {
-        closeModal();
-        handleResetForm(); // Reset the form after successful signup
-      })
-      .catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
-      });
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.errors) {
+            setErrors(data.errors);
+          }
+        });
     }
     return setErrors({
-      confirmPassword: "Please make both passwords match."
+      confirmPassword: "Confirm Password field must be the same as the Password field"
     });
   };
 
@@ -67,12 +47,6 @@ function SignupFormModal() {
 
   return (
     <>
-      <button className={styles.button} onClick={toggleModal}>
-        Sign Up
-      </button>
-
-      {isModalOpen && ( // Render the modal content only when isModalOpen is true
-      <div className={styles["signup-form-container"]}>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label>
@@ -134,11 +108,11 @@ function SignupFormModal() {
             required
           />
         </label>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+        {errors.confirmPassword && (
+          <p>{errors.confirmPassword}</p>
+        )}
         <button type="submit">Sign Up</button>
       </form>
-      </div>
-      )}
     </>
   );
 }

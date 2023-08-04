@@ -10,7 +10,6 @@ import OpenModalButton from "../OpenModalButton";
 import SignupFormModal from "../SignupFormModal";
 import LoginFormModal from "../LoginFormModal";
 
-
 const ProfileButton = () => {
   const dispatch = useDispatch();
   const ulRef = useRef();
@@ -29,15 +28,13 @@ const ProfileButton = () => {
       window.removeEventListener("storage", handleUserChange);
     };
   }, []);
-
+// Menu dropdown functionality
   const toggleMenu = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   };
-
   const closeMenu = () => {
     setShowMenu(false);
   };
-
   useEffect(() => {
     const handleOutsideClick = (e) => {
       if (!containerRef.current || !ulRef.current) {
@@ -55,14 +52,12 @@ const ProfileButton = () => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
-
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
     history.push("/");
   };
-
   const ulClassName = "profile-dropdown" + (showMenu ? " show" : ""); // Add "show" class to display the dropdown
 
   return (
@@ -78,9 +73,6 @@ const ProfileButton = () => {
         // IF NOT LOGGED IN
             <>
               <li>
-              {/* <button className="login-button" onClick={toggleLoginModal}>
-                  Log In <LoginFormModal/>
-                </button> */}
                 <OpenModalButton
                   buttonText="Log In"
                   modalComponent={<LoginFormModal />}
