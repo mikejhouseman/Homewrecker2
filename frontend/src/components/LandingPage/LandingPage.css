@@ -1,5 +1,12 @@
 /* frontend/src/components/LandingPage/LandingPage.css */
 
+/* Color scheme */
+:root {
+  --primary-color: #0a0a0a;
+  --secondary-color: #ff0000
+  --text-color: #333;
+}
+
 /* Landing Page Styles */
 h1 {
   text-align: center;
@@ -10,33 +17,82 @@ h1 {
 .spot-tile-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  max-width: 800px;
-  margin: 0 auto;
+  justify-content: space-between;
 }
 
+/* Individual spot tile */
 .spot-tile {
-  width: 280px;
-  margin: 20px;
-  padding: 15px;
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  width: calc(25% - 20px); /* Adjusted for responsive layout */
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
 }
 
-.spot-tile img {
+/* Spot image thumbnail */
+.spot-thumbnail {
   width: 100%;
-  max-height: 200px;
+  height: 150px;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.spot-tile h2 {
-  margin: 10px 0;
-  color: var(--primary-color);
+/* Spot name tooltip */
+.tooltip {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  display: none;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
 }
 
-.spot-tile p {
-  color: var(--text-color);
+.spot-tile:hover .tooltip {
+  display: block;
+}
+
+/* Star rating */
+.star-rating {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.star-icon {
+  color: #ffd700;
+  margin-right: 5px;
+}
+
+/* Price label */
+.price {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Spot details (city and state) */
+.details {
+  margin-top: 5px;
+  color: #666;
+}
+
+/* Responsive Layout */
+@media screen and (max-width: 1200px) {
+  .spot-tile {
+    width: calc(33.33% - 20px);
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .spot-tile {
+    width: calc(50% - 20px);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .spot-tile {
+    width: calc(100% - 20px);
+  }
 }

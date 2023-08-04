@@ -1,23 +1,16 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSpots, getSpotDetails } from '../../store/spot';
+import { getSpots } from '../../store/spot';
 import './LandingPage.css';
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spot.list);
 
-// ADD ABILITY TO SHOW ADDSPOTMODALFORM HERE IF THE USER IS LOGGED IN.
-
-
-useEffect(() => {
-  dispatch(getSpots());
-}, [dispatch]);
-
-const handleSpotClick = (spotId) => {
-  dispatch(getSpotDetails(spotId));
-};
+  useEffect(() => {
+    dispatch(getSpots());
+  }, [dispatch]);
 
   return (
     <div>
@@ -26,18 +19,18 @@ const handleSpotClick = (spotId) => {
         {spots && spots.length > 0 ? (
           <div>
             {spots.map((spot) => (
-              <Link key={spot.id} to={`/spots/${spot.id}`}>
-                <div onClick={() => handleSpotClick(spot.id)}>
-                  <img
-                    src={spot.images.length > 0 ? spot.images[0].url : 'placeholder.jpg'}
-                    alt={`Spot ${spot.name}`}
-                  />
-                  <h2>{spot.name}</h2>
-                  <p>{spot.city}</p>
-                  <p>{spot.state}</p>
-                  <p>{spot.price}</p>
-                </div>
-              </Link>
+              <div key={spot.id} className="spot-tile">
+                <Link to={`/spots/${spot.id}`}>
+                  <div>
+                    <div className="spot-thumbnail-placeholder">No Image Available</div>
+                    <div className="tooltip">{spot.name}</div>
+                    <h2>{spot.name}</h2>
+                    <p>{spot.city}</p>
+                    <p>{spot.state}</p>
+                    <p>{spot.price}</p>
+                  </div>
+                </Link>
+              </div>
             ))}
           </div>
         ) : (
