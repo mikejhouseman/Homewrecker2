@@ -55,12 +55,24 @@ export const restoreUser = () => async (dispatch) => {
   return response;
 };
 
+// export const logout = () => async (dispatch) => {
+//   const response = await csrfFetch('/api/session', {
+//     method: 'DELETE',
+//   });
+//   dispatch(removeUser());
+//   return response;
+// };
+
 export const logout = () => async (dispatch) => {
-  const response = await csrfFetch('/api/session', {
-    method: 'DELETE',
-  });
-  dispatch(removeUser());
-  return response;
+  try {
+    await csrfFetch('/api/session', {
+      method: 'DELETE',
+    });
+    dispatch(removeUser());
+  } catch (err) {
+    // Handle error if needed
+    console.error('Logout Error:', err);
+  }
 };
 
 const initialState = { user: null };
