@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
-import './SignupFormModal.css'
+import './SignupFormModal.css';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
-  // const sessionUser = useSelector((state) => state.session.user);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -37,24 +36,29 @@ function SignupFormModal() {
             setErrors(data.errors);
           }
         });
+    } else {
+      setErrors({
+        confirmPassword: "Confirm Password field must be the same as the Password field"
+      });
     }
-    return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
   };
 
   const isSubmitDisabled = () => {
     return (
-      !email.trim() || username.trim().length < 4 || !firstName.trim() ||
-      !lastName.trim() || password.trim().length < 6 || !confirmPassword.trim()
+      !email.trim() ||
+      username.trim().length < 4 ||
+      !firstName.trim() ||
+      !lastName.trim() ||
+      password.trim().length < 6 ||
+      !confirmPassword.trim()
     );
-  }
+  };
 
   return (
     <>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
-      <label>
+        <label>
           First Name
           <input
             type="text"
