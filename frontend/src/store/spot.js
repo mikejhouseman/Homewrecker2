@@ -89,8 +89,8 @@ export const getSpotDetails = (spotId) => async (dispatch) => {
     if (!res.ok) {
       throw new Error('Failed to fetch spot details from the server.');
     }
-    const detailedSpot = await res.json();
-    dispatch(spotDetails(detailedSpot));
+    const spotData = await res.json();
+    dispatch(spotDetails(spotData));
   } catch (error) {
     console.error('Error fetching spot details:', error);
   }
@@ -249,7 +249,7 @@ export const deleteSpotImage = (imageId) => async (dispatch) => {
 
 const initialState = { list: [], current: null };
 
-const spotsReducer = (state = initialState, action) => {
+const spotReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_SPOTS:
       return {
@@ -259,7 +259,7 @@ const spotsReducer = (state = initialState, action) => {
     case SPOT_DETAILS:
       return {
         ...state,
-        current: action.spot,
+        details: action.spot,
       };
     case ADD_SPOT:
       return {
@@ -331,4 +331,4 @@ const spotsReducer = (state = initialState, action) => {
   }
 };
 
-export default spotsReducer;
+export default spotReducer;

@@ -71,7 +71,38 @@ const reviewCounter = async (req, res, next) => {
     next();
   };
 
-// 11 Get details for a Spot from an id
+// // 11 Backend Get details for a Spot from an id
+// router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
+//   const spotId = req.params.id;
+//   const spot = await Spot.findByPk(spotId, {
+//     include: [
+//       {
+//         model: Image,
+//         as: 'SpotImages',
+//         attributes: ['id', 'url', 'preview'],
+//       },
+//       {
+//         model: User,
+//         as: 'Owner',
+//         attributes: ['id', 'firstName', 'lastName'],
+//       },
+//     ],
+//     group: [
+//       'Spot.id',
+//       'SpotImages.id',
+//       'Owner.id',
+//     ],
+//   });
+//   if(!spot) {
+//     return res.status(404).json({error: 'Spot could not be found'})
+//   };
+//   spot.dataValues.numReviews = req.numReviews;
+//   spot.dataValues.avgStarRating = req.avgStarRating;
+//   delete spot.dataValues.previewImage;
+//   res.status(200).json(spot);
+// });
+
+// NEW ROUTE FOT GET DETAILS OF SPOT BY ID THAT INCLUDES AVGSTARRATING IN RESPONSE
 router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
   const spotId = req.params.id;
   const spot = await Spot.findByPk(spotId, {
@@ -93,13 +124,16 @@ router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
       'Owner.id',
     ],
   });
-  if(!spot) {
-    return res.status(404).json({error: 'Spot could not be found'})
+  if (!spot) {
+    return res.status(404).json({ error: 'Spot could not be found' });
+  }
+  const avgStarRating = req.avgStarRating; // Assuming req.avgStarRating holds the average rating
+  const responseSpot = {
+    ...spot.toJSON(),
+    avgStarRating: avgStarRating,
   };
-  spot.dataValues.numReviews = req.numReviews;
-  spot.dataValues.avgStarRating = req.avgStarRating;
-  delete spot.dataValues.previewImage;
-  res.status(200).json(spot);
+
+  res.status(200).json(responseSpot);
 });
 
 // 12 Create and return a new spot
@@ -139,9 +173,6 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
   });
   res.status(200).json(updatedSpot);
 });
-
-
-
 
 
 // 13 Add an Image to a Spot based on the Spot's id

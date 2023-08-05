@@ -2,37 +2,40 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSpots } from '../../store/spot';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faStar } from '@fortawesome/free-solid-svg-icons';
+import { getSpots, getSpotDetails  } from '../../store/spot';
 import './LandingPage.css';
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spot.list);
-  const location = useLocation();
+  // const location = useLocation();
 
   useEffect(() => {
     dispatch(getSpots());
-  }, [dispatch, location.pathname]);
+  }, [dispatch ]);
 
-  useEffect(() => {
-    const fetchAvgRatings = async () => {
-      try {
-        for (const spotId in spots) {
-          const response = await fetch(`/api/spots/${spotId}`);
-          if (response.ok) {
-            const spotData = await response.json();
-            spots[spotId].avgRating = spotData.avgStarRating || null;
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching average ratings', error);
-      }
-    };
-    fetchAvgRatings();
-  }, [spots]);
+  // location.pathname
 
+  // useEffect(() => {
+  //   const fetchAvgRatings = async () => {
+  //     try {
+  //       const requests = spots.map((spot) => fetch(`/api/spots/${spot.id}`));
+  //       const responses = await Promise.all(requests);
+  //       const spotDataList = await Promise.all(responses.map((response) => response.json()));
+
+  //       spotDataList.forEach((spotData, index) => {
+  //         spots[index].avgRating = spotData.avgStarRating || null;
+  //       });
+  //     } catch (error) {
+  //       console.error('Error fetching average ratings', error);
+  //     }
+  //   };
+  //   fetchAvgRatings();
+  // }, [spots]);
+
+// ? on 47 means don't try to link to spot.id if spot doesn't exist
   return (
     <div>
       <h1>Check out your wreckable spots!</h1>
@@ -40,8 +43,8 @@ const LandingPage = () => {
         {spots && spots.length > 0 ? (
           <div>
             {spots.map((spot) => (
-              <div key={spot.id} className="spot-tile">
-                <Link to={`/spots/${spot.id}`}>
+               <div key={spot.id} className="spot-tile">
+                  <Link to={`/spots/${spot?.id}`}>
                   <div tooltip={spot.name}>
                     {spot.image ? (
                       <img src={spot.image} alt={spot.name} />
@@ -54,7 +57,7 @@ const LandingPage = () => {
                     <p>{spot.state}</p>
                     {spot.avgRating ? (
                       <p>
-                        <FontAwesomeIcon icon={faStar} /> {spot.avgRating.toFixed(2)}
+                        <FontAwesomeIcon icon={faStar} /> {spot.avgStarRating}
                       </p>
                     ) : (
                       <p>New</p>
