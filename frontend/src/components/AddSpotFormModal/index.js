@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import Modal from 'react-modal';
+import { useModal } from "../../context/Modal";
 import * as spotActions from '../../store/spot';
 
-// Set the modal root element in the DOM
-Modal.setAppElement('#root');
 
 const AddSpotFormModal = ({ isOpen, onRequestClose }) => {
   const dispatch = useDispatch();

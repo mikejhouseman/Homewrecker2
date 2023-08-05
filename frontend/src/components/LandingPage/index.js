@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSpots } from '../../store/spot';
 import './LandingPage.css';
@@ -7,10 +7,11 @@ import './LandingPage.css';
 const LandingPage = () => {
   const dispatch = useDispatch();
   const spots = useSelector((state) => state.spot.list);
+  const location = useLocation();
 
   useEffect(() => {
     dispatch(getSpots());
-  }, [dispatch]);
+  }, [dispatch, location.pathname]);
 
   return (
     <div>

@@ -30,7 +30,7 @@ function App() {
           <Route exact path="/signup">
             <SignupFormModal />
           </Route> */}
-          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/" component={LandingPage} key={window.location.pathname} />
         </Switch>
       )}
     </>
