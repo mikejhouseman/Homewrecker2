@@ -12,7 +12,7 @@ const SpotDetails = () => {
   const spot = useSelector((state) => state.spot.details);
   const dispatch = useDispatch();
 
-  console.log("HEYYYYYY GURLLL");
+  // console.log("HEYYYYYY GURLLL");
 
   useEffect(() => {
     dispatch( getSpotDetails(spotId));
@@ -32,15 +32,15 @@ const SpotDetails = () => {
 
   return (
     <div className="spot-details-container">
-      <div className="spot-details-header">
+      <div className="spot-details-heading">
         <h1>{spot?.name}</h1>
-        <p>Location: {`${spot?.city}, ${spot?.state}`}</p>
+        <h2>Location: {`${spot?.city}, ${spot?.state}`}</h2>
       </div>
-      <div className="spot-details-images">
-        <div className="spot-details-large-image">
+      <div className="spot-details-icons">
+        <div className="spot-details-large-icon">
           <img src={spot?.largeImage} alt={`Large image of ${spot?.name}`} />
         </div>
-        <div className="spot-details-small-images">
+        <div className="spot-details-small-icons">
           {spot?.smallImages.map((image, index) => (
             <div key={index}>
               <img src={image} alt={`Small image ${index + 1} of ${spot?.name}`} />
@@ -49,7 +49,7 @@ const SpotDetails = () => {
         </div>
       </div>
       <div className="spot-details-host">
-        <h1>Hosted by {`${spot?.user.firstName} ${spot?.user.lastName}`}</h1>
+        <h3>Hosted by {`${spot?.user.firstName} ${spot?.user.lastName}`}</h3>
       </div>
       <div className="spot-details-description">
         <p>{spot?.description}</p>

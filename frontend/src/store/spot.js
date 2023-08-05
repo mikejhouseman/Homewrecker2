@@ -1,5 +1,4 @@
 // frontend/src/store/spot.js
-
 // action types
 const LOAD_SPOTS = 'spot/LOAD_SPOTS';
 const SPOT_DETAILS = 'spot/SPOT_DETAILS';
@@ -12,7 +11,6 @@ const GET_REVIEWS = 'spot/GET_REVIEWS';
 const GET_BOOKINGS = 'spot/GET_BOOKINGS';
 const ADD_BOOKING = 'spot/ADD_BOOKING';
 const DELETE_IMAGE = 'spot/DELETE_IMAGE';
-
 // action creators
 export const loadSpots = (spots) => ({
   type: LOAD_SPOTS,
@@ -247,7 +245,7 @@ export const deleteSpotImage = (imageId) => async (dispatch) => {
   }
 };
 
-const initialState = { list: [], current: null };
+const initialState = { list: [], current: null, details: null };
 
 const spotReducer = (state = initialState, action) => {
   switch (action.type) {
