@@ -41,7 +41,9 @@ function AddSpotFormModal() {
   const [ name, setName ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ price, setPrice ] = useState('');
-  const [ errors, setErrors ] = useState({}); // TODO: Add error handling
+  const [ errors, setErrors ] = useState({});
+  // const [ previewImage, setPreviewImage ] = useState('');
+  // const [ spotImage, setSpotImage ] = useState('');
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
@@ -122,7 +124,35 @@ function AddSpotFormModal() {
           onChange={(e) => setPrice(e.target.value)}
           placeholder="Price per night (USD)" />
         </div>
-        {/* ADD PHOTOS, ERROR HANDLERS */}
+        <h2>Liven up your spot with photos</h2>
+        <h3>Submit a link to at least one photo to publish your spot.</h3>
+        <div className="form-group-photos">
+          {/* <div className="preview-photo">
+            <input type="text"
+            value={previewImage}
+            onChange={(e) => setPreviewImage(e.target.value)}
+            placeholder="Preview Image URL" />
+          </div>
+          <div className="image-1">
+            <input type="text"
+            value={spotImage}
+            onChange={(e) => setSpotImage(e.target.value)}
+            placeholder="Image URL" />
+          </div>
+          <div className="image-2">
+            <input type="text"
+            value={spotImage}
+            onChange={(e) => setSpotImage(e.target.value)}
+            placeholder="Image URL" />
+          </div>
+          <div className="image-3">
+            <input type="text"
+            value={spotImage}
+            onChange={(e) => setSpotImage(e.target.value)}
+            placeholder='Image URL' />
+          </div> */}
+        </div>
+        {/* ADD ERROR HANDLERS */}
         {errors && Object.keys(errors).length > 0 && (
           <div className="errors">
             {Object.keys(errors).map((key) => (
