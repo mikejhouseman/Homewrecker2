@@ -43,12 +43,37 @@ function SignupFormModal() {
     });
   };
 
-
+  const isSubmitDisabled = () => {
+    return (
+      !email.trim() || username.trim().length < 4 || !firstName.trim() ||
+      !lastName.trim() || password.trim().length < 6 || !confirmPassword.trim()
+    );
+  }
 
   return (
     <>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
+      <label>
+          First Name
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </label>
+        {errors.firstName && <p>{errors.firstName}</p>}
+        <label>
+          Last Name
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </label>
+        {errors.lastName && <p>{errors.lastName}</p>}
         <label>
           Email
           <input
@@ -69,26 +94,6 @@ function SignupFormModal() {
           />
         </label>
         {errors.username && <p>{errors.username}</p>}
-        <label>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
         <label>
           Password
           <input
@@ -111,7 +116,7 @@ function SignupFormModal() {
         {errors.confirmPassword && (
           <p>{errors.confirmPassword}</p>
         )}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={isSubmitDisabled()}>Sign Up</button>
       </form>
     </>
   );
