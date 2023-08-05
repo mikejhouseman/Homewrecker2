@@ -5,48 +5,51 @@
   align-items: center;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #f8f8f8;
+  color: #333;
+  max-width: 400px; /* Limit the modal width to 400px */
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
+  color: #444;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  color: #666; /* Slightly lighter label text color */
 }
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 16px;
+  max-width: 100%; /* Ensure input does not exceed the parent container's width */
 }
 
 p {
-  color: red;
-  margin-bottom: 10px;
+  color: #f44336;
+  margin-bottom: 15px;
 }
 
 button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 4px;
-  font-size: 16px;
+  font-size: 18px;
   color: #fff;
   background-color: #f44336;
   cursor: pointer;
@@ -63,26 +66,22 @@ button:disabled {
 }
 
 button:last-child {
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: #f44336;
 }
 
-/* Add padding between the buttons */
 button:not(:last-child) {
   margin-bottom: 10px;
 }
 
-/* Make the last button identical to the other buttons */
 button:last-child {
   background-color: #f44336;
 }
 
-/* Apply the hover effect to the last button */
 button:last-child:hover {
   background-color: #d32f2f;
 }
 
-/* Apply the disabled effect to the last button */
 button:last-child:disabled {
   background-color: #ddd;
   cursor: not-allowed;

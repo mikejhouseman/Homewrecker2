@@ -35,14 +35,16 @@ const ProfileButton = () => {
   const closeMenu = () => {
     setShowMenu(false);
   };
+
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (!containerRef.current || !ulRef.current) {
-        return;
+      if (!showMenu) {
+        return; // Do nothing if the menu is already closed
       }
       if (
+        containerRef.current &&
         !containerRef.current.contains(e.target) &&
-        !ulRef.current.contains(e.target)
+        !e.target.classList.contains("manage-buttons")
       ) {
         closeMenu();
       }
@@ -51,7 +53,8 @@ const ProfileButton = () => {
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
-  }, []);
+  }, [showMenu]);
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
@@ -71,7 +74,7 @@ const ProfileButton = () => {
         <ul className={ulClassName} ref={ulRef}>
           {!sessionUser ? (
         // IF NOT LOGGED IN
-            <>
+            <div className="manage-buttons">
               <li>
                 <OpenModalButton
                   buttonText="Log In"
@@ -84,19 +87,19 @@ const ProfileButton = () => {
                   modalComponent={<SignupFormModal />}
                 />
               </li>
-            </>
+            </div>
           ) : (
         // IF LOGGED IN
-            <>
+            <div className="manage-buttons">
               <li>Hello, {sessionUser.firstName}</li>
               <li>{sessionUser.email}</li>
               <li>
                 <button onClick={logout}>Log Out</button>
               </li>
               <li>
-                <button className="manage-button">Manage Spots</button>
+                <button>Manage Spots</button>
               </li>
-            </>
+            </div>
           )}
         </ul>
       )}

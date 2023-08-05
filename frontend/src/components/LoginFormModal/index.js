@@ -44,7 +44,7 @@ return (
     <h1>Log In</h1>
     <form onSubmit={handleSubmit}>
       <label>
-        Username or Email
+        Username or email
         <input
           type="text"
           value={credential}
