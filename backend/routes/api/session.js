@@ -51,10 +51,25 @@ router.post('/', validateLogin, async (req, res, next) => {
 );
 
 // 04 Get current user
+// router.get('/', async (req, res) => {
+//   console.log(req.body);
+//   console.log(req.user);
+//   if(req.user){
+//     const userId = req.user.id;
+//     const user = await User.findOne({
+//       where: {
+//         id: userId,
+//       },
+//       attributes: ['id', 'firstName', 'lastName', 'email', 'username'],
+//     });
+//     return res.status(200).json({ user });
+//   }
+//   else return res.status(404).json({ "user": null });
+// });
 router.get('/', async (req, res) => {
   console.log(req.body);
   console.log(req.user);
-  if(req.user){
+  if (req.user) {
     const userId = req.user.id;
     const user = await User.findOne({
       where: {
@@ -64,9 +79,12 @@ router.get('/', async (req, res) => {
     });
     return res.status(200).json({ user });
   }
-  else return res.status(404).json({ "user": null });
+  // Additional behavior for req.user being null can be added here
+  // if needed, using the logic from the second route handler
+  else {
+    return res.json({ user: null });
+  }
 });
-
 
 // Log out
 router.delete('/', (_req, res) => {
@@ -76,19 +94,19 @@ router.delete('/', (_req, res) => {
 );
 
 // Restore session user
-router.get('/', (req, res) => {
-  if (req.user) {
-    const safeUser = {
-      id: req.user.id,
-      email: req.user.email,
-      username: req.user.username,
-    };
-    return res.json({
-      user: safeUser
-    });
-  } else {
-    return res.json({ user: null });
-  }
-});
+// router.get('/', (req, res) => {
+//   if (req.user) {
+//     const safeUser = {
+//       id: req.user.id,
+//       email: req.user.email,
+//       username: req.user.username,
+//     };
+//     return res.json({
+//       user: safeUser
+//     });
+//   } else {
+//     return res.json({ user: null });
+//   }
+// });
 
 module.exports = router;

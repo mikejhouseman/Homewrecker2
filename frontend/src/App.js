@@ -30,9 +30,7 @@ function App() {
           <Route exact path="/signup">
             <SignupFormModal />
           </Route> */}
-          <Route exact path="/">
-            <LandingPage />
-          </Route>
+          <Route exact path="/" component={LandingPage} />
         </Switch>
       )}
     </>
