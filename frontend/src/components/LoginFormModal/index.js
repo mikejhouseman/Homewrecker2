@@ -35,7 +35,7 @@ function LoginFormModal() {
     handleSubmit(e);
   };
 
-  // const isSubmitDisabled = credential.length < 4 || password.length < 6;
+  const isSubmitDisabled = credential.length < 4 || password.length < 6;
 
 
 
@@ -64,7 +64,7 @@ return (
       {errors.credential && (
         <p>{errors.credential}</p>
       )}
-      <button type="submit">Log In</button>
+      <button type="submit" disabled={isSubmitDisabled}>Log In</button>
     </form>
     <button onClick={handleDemoLogin} className="button">
     Log In as Demo User
