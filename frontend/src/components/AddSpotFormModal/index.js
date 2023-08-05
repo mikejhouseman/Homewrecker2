@@ -4,6 +4,34 @@ import { useDispatch } from 'react-redux';
 import { useModal } from "../../context/Modal";
 import './AddSpotFormModal.css';
 
+//
+//    TO DO:
+//
+//   EDITS TO BACKEND:
+// - Add country to spots table
+// - Figure out how images work
+//
+//  SPECIFICATIONS:
+// - Show Spot Details for the new spot on successful create
+// - This form resets when exiting (on Create, header link / button click, etc.)
+//    so it always starts with no errors, and empty form inputs.
+// - Upon successful create, create a spot details page for the new spot and direct users to it
+//
+// - VALIDATION NOTES:
+//  Required fields:
+//    When "Create" is clicked, show message under every empty feld that indicates
+//    that feld is required (e. g. "Address is required" and so on for all felds)
+//    Note: Out of all the image URL inputs, only the preview image URL is required.
+//  Description Minimum Length:
+//    When "Create" is clicked, show message "Description
+//    needs 30 or more characters" under the description
+//    input if user entered less than 30 characters.
+//   Image URLs
+//    When "Create" is clicked, show message "Image URL
+//    needs to end in png or jpg (or jpeg)" under any image
+//    URL inputs which don't have the proper fle type
+
+
 
 function AddSpotFormModal() {
   const dispatch = useDispatch();
@@ -29,33 +57,72 @@ function AddSpotFormModal() {
 
   return (
     <>
-      <h2>Add a New Spot</h2>
+      <h1>Create a new Spot</h1>
       <form onSubmit={handleSubmit} className="add-spot-form">
-        {/* Add your form fields here */}
-        <div className="form-group">
-          <label>Address</label>
-          <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+      <h2>Where's your place located?</h2>
+      <h3>Guests will only get your exact address once they booked a reservation.</h3>
+        <div className="form-group-located">
+          {/* <label>Country</label>
+          <input type="text"
+          value={country}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Country"
+           /> */}
         </div>
-        <div className="form-group">
+        <div className="form-group-located">
+          <label>Street Address</label>
+          <input type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Address"
+          />
+        </div>
+        <div className="form-group-located">
           <label>City</label>
-          <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
+          <input type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          placeholder="City"
+           />
         </div>
-        <div className="form-group">
+        <div className="form-group-located">
           <label>State</label>
-          <input type="text" value={state} onChange={(e) => setState(e.target.value)} />
+          <input type="text"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          placeholder="State" />
         </div>
-        <div className="form-group">
-          <label>Name</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div className="form-group">
+        <h2>Describe your place to guests</h2>
+        <h3>Mention the best features of your space, any special amentities like
+            fast wifi or parking, and what you love about the neighborhood.</h3>
+        <div className="form-group-description">
           <label>Description</label>
-          <input type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <input type="text"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          maxlength="30"
+          placeholder='Please write at least 30 characters' />
         </div>
-        <div className="form-group">
-          <label>Price</label>
-          <input type="text" value={price} onChange={(e) => setPrice(e.target.value)} />
+        <div className="form-group-title">
+        <h2>Create a title for your spot</h2>
+        <h3>Catch guests' attention with a spot title that highlights what makes
+            your place special.</h3>
+          <input type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name of your spot" />
         </div>
+        <div className="form-group-price">
+        <h2>Set a base price for your spot</h2>
+        <h3>Competitive pricing can help your listing stand out and rank higher
+            in search results.</h3>
+          <label>$</label>
+          <input type="text"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          placeholder="Price per night (USD)" />
+        </div>
+        {/* ADD PHOTOS, ERROR HANDLERS */}
         {errors && Object.keys(errors).length > 0 && (
           <div className="errors">
             {Object.keys(errors).map((key) => (
@@ -64,8 +131,7 @@ function AddSpotFormModal() {
           </div>
         )}
         <div className="form-buttons">
-          <button type="submit">Add Spot</button>
-          <button type="button" onClick={closeModal}>Cancel</button>
+          <button type="submit">Create Spot</button>
         </div>
       </form>
     </>
