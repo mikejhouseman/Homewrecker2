@@ -9,7 +9,6 @@ import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  // const { closeModal, modalRef } = useModal();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -39,48 +38,6 @@ function LoginFormModal() {
   // const isSubmitDisabled = credential.length < 4 || password.length < 6;
 
 
-//   return (
-//     <div>
-//       {!sessionUser && (
-//         <button className={styles.button} onClick={toggleModal}>
-//           Log In
-//         </button>
-//       )}
-//       {isModalOpen && !sessionUser && (
-//         <div className={styles["login-form-container"]} ref={modalRef}>
-//           <h1>Log In</h1>
-//           <form onSubmit={handleSubmit}>
-//             <label>
-//               Username or Email
-//               <input
-//                 type="text"
-//                 value={credential}
-//                 onChange={(e) => setCredential(e.target.value)}
-//                 required
-//               />
-//             </label>
-//             <label>
-//               Password
-//               <input
-//                 type="password"
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 required
-//               />
-//             </label>
-//             {errors.credential && <p>{errors.credential}</p>}
-//             <button type="submit" disabled={isSubmitDisabled} className={styles.button}>
-//               Log In
-//             </button>
-//           </form>
-//           <button onClick={handleDemoLogin} className={styles.button}>
-//             Log In as Demo User
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 
 return (
   <>

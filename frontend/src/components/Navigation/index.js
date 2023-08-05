@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import OpenModalButton from "../OpenModalButton";
 import AddSpotFormModal from '../AddSpotFormModal';
 import logoImage from '../Assets/homewreckerLogo.png';
 import './Navigation.css';
