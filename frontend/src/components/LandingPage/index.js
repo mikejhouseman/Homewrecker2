@@ -4,8 +4,9 @@ import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faStar } from '@fortawesome/free-solid-svg-icons';
-import { getSpots, getSpotDetails  } from '../../store/spot';
+import { getSpots  } from '../../store/spot';
 import './LandingPage.css';
+import SpotDetails from '../SpotDetails';
 
 const LandingPage = () => {
   const dispatch = useDispatch();
@@ -65,6 +66,9 @@ const LandingPage = () => {
                     <p>${spot.price} night</p>
                   </div>
                 </Link>
+                {/* <Link to={"/spots"}>
+                  <SpotDetails />
+                  </Link> */}
               </div>
             ))}
           </div>
