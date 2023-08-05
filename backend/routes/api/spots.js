@@ -1,5 +1,4 @@
 // backend/routes/api/spots.js
-
 const express = require('express');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
@@ -72,6 +71,37 @@ const reviewCounter = async (req, res, next) => {
     next();
   };
 
+// 11 Get details for a Spot from an id
+router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
+  const spotId = req.params.id;
+  const spot = await Spot.findByPk(spotId, {
+    include: [
+      {
+        model: Image,
+        as: 'SpotImages',
+        attributes: ['id', 'url', 'preview'],
+      },
+      {
+        model: User,
+        as: 'Owner',
+        attributes: ['id', 'firstName', 'lastName'],
+      },
+    ],
+    group: [
+      'Spot.id',
+      'SpotImages.id',
+      'Owner.id',
+    ],
+  });
+  if(!spot) {
+    return res.status(404).json({error: 'Spot could not be found'})
+  };
+  spot.dataValues.numReviews = req.numReviews;
+  spot.dataValues.avgStarRating = req.avgStarRating;
+  delete spot.dataValues.previewImage;
+  res.status(200).json(spot);
+});
+
 // 12 Create and return a new spot
 router.post('/', requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price} = req.body;
@@ -112,36 +142,7 @@ router.put('/:id', requireAuth, validateSpot, async (req, res) => {
 
 
 
-// 11 Get details for a Spot from an id
-router.get('/:id', reviewCounter, reviewAvg, async (req, res) => {
-  const spotId = req.params.id;
-  const spot = await Spot.findByPk(spotId, {
-    include: [
-      {
-        model: Image,
-        as: 'SpotImages',
-        attributes: ['id', 'url', 'preview'],
-      },
-      {
-        model: User,
-        as: 'Owner',
-        attributes: ['id', 'firstName', 'lastName'],
-      },
-    ],
-    group: [
-      'Spot.id',
-      'SpotImages.id',
-      'Owner.id',
-    ],
-  });
-  if(!spot) {
-    return res.status(404).json({error: 'Spot could not be found'})
-  };
-  spot.dataValues.numReviews = req.numReviews;
-  spot.dataValues.avgStarRating = req.avgStarRating;
-  delete spot.dataValues.previewImage;
-  res.status(200).json(spot);
-});
+
 
 // 13 Add an Image to a Spot based on the Spot's id
 router.post('/:id/images', requireAuth, async (req, res) => {

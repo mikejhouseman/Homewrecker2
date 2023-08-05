@@ -10,6 +10,8 @@ import OpenModalButton from "../OpenModalButton";
 import SignupFormModal from "../SignupFormModal";
 import LoginFormModal from "../LoginFormModal";
 
+// ADD A MANAGE REVIEWSMODALFORM BUTTON FOR WHEN USER IS LOGGED IN
+
 const ProfileButton = () => {
   const dispatch = useDispatch();
   const ulRef = useRef();
