@@ -1,21 +1,24 @@
 //frontend/src/components/LandingPage/index.js
 import React, { useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHouse, faStar } from '@fortawesome/free-solid-svg-icons';
 import { getSpots  } from '../../store/spot';
 import './LandingPage.css';
-import SpotDetails from '../SpotDetails';
+
 
 const LandingPage = () => {
   const dispatch = useDispatch();
-  const spots = useSelector((state) => state.spot.list);
-  // const location = useLocation();
+
 
   useEffect(() => {
     dispatch(getSpots());
   }, [dispatch ]);
+
+  const spots = useSelector((state) => state.spot.list);
+
+
 
   // location.pathname
 
@@ -38,14 +41,14 @@ const LandingPage = () => {
 
 // ? on 47 means don't try to link to spot.id if spot doesn't exist
   return (
-    <div>
+    <div className="landing-page">
       <h1>Check out your wreckable spots!</h1>
       <div className="spot-tile-list">
         {spots && spots.length > 0 ? (
           <div>
             {spots.map((spot) => (
                <div key={spot.id} className="spot-tile">
-                  <Link to={`/spots/${spot?.id}`}>
+                  <NavLink to={`/spots/${spot?.id}`}>
                   <div tooltip={spot.name}>
                     {spot.image ? (
                       <img src={spot.image} alt={spot.name} />
@@ -65,10 +68,7 @@ const LandingPage = () => {
                     )}
                     <p>${spot.price} night</p>
                   </div>
-                </Link>
-                {/* <Link to={"/spots"}>
-                  <SpotDetails />
-                  </Link> */}
+                </NavLink>
               </div>
             ))}
           </div>
